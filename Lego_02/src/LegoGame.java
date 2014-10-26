@@ -326,11 +326,13 @@ public class LegoGame extends PApplet {
 			return;
 		gameManager.getBrickFollowMouse().calibrateAfterRotate();
 
+		boolean flagCheckKeyCode = false;
 		if (key == 't' || key == 'T' || keyCode == 37) {
 			gameManager.getBrickFollowMouse().getRotate()
 					.add(0, Util.ROTATE_ANGLE_ADDED, 0);
 			gameManager.getBrickFollowMouse().decreaseTimesRotate();
 			gameManager.setSwitchBrick(false);
+			flagCheckKeyCode = true;
 		}
 
 		/*
@@ -341,9 +343,11 @@ public class LegoGame extends PApplet {
 					.subtract(0, Util.ROTATE_ANGLE_ADDED, 0);
 			gameManager.getBrickFollowMouse().increaseTimesRotate();
 			gameManager.setSwitchBrick(false);
+			flagCheckKeyCode = true;
 		}
 
 		if (Util.KEY_SWITCH_BRICK.indexOf(key) != -1) {
+			flagCheckKeyCode = true;
 			// Process switching brick
 			gameManager.getCurBrick().setModelName(
 					Util.MODEL_NAME_LIST.get((Integer.parseInt(String
@@ -364,10 +368,12 @@ public class LegoGame extends PApplet {
 			}
 		}
 
-		gameManager.setGeneratedTempIF(false);
-		gameManager.setResetTempIFList(true);
-
-		gameManager.generateInteractiveFrameForSpecialCase2(tempBrick, scene);
+		if (flagCheckKeyCode) {
+			gameManager.setGeneratedTempIF(false);
+			gameManager.setResetTempIFList(true);
+			gameManager.generateInteractiveFrameForSpecialCase2(tempBrick,
+					scene);
+		}
 	}
 
 	public void mouseClicked() {

@@ -33,7 +33,7 @@ public class Util {
 	public static int THRESHOLD_VALUE = 20;
 	public static Dictionary<String, ArrayList<InteractiveFrame>> interactiveFrameDictionary = new Hashtable<String, ArrayList<InteractiveFrame>>();
 	public static String KEY_SWITCH_BRICK = "0123456789";
-	public static boolean DRAW_AXES = true;
+	public static boolean DRAW_AXES = false;
 	public static String FONT_FILE_NAME_DEFAULT = "SegoeUI-Light-48.vlw";
 	public static int FONT_SIZE_DEFAULT = 48;
 
