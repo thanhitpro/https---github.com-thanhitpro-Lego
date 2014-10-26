@@ -1,0 +1,2 @@
+Brick_2x1
+Roof_tile_2x2
