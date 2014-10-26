@@ -7,6 +7,7 @@ import remixlab.dandelion.constraint.AxisPlaneConstraint;
 import remixlab.dandelion.constraint.LocalConstraint;
 import remixlab.dandelion.core.InteractiveFrame;
 import remixlab.dandelion.geom.Vec;
+import remixlab.proscene.Scene;
 import saito.objloader.OBJModel;
 import controlP5.ControlP5;
 
@@ -31,6 +32,8 @@ public class GameManager {
 	private ArrayList<GuiText> guiTexts;
 	private ControlP5 controlP5;
 	private Brick prevFollowMouseBrick;
+	private boolean resetTempIFList = false;
+	private boolean switchBrick = false;
 
 	public GameManager(PApplet p) {
 		super();
@@ -382,15 +385,54 @@ public class GameManager {
 		}
 	}
 
-	public void generateInteractiveFrameForSpecialCase2(Brick baseBrick) {
+	public void generateInteractiveFrameForSpecialCase2(Brick brick, Scene scene) {
 		if (isGeneratedTempIF) {
 			return;
 		}
 
-		// tempInteractiveFrames = new ArrayList<InteractiveFrame>();
-		baseBrick.generateInteractiveFrameForSpecialCase2(brickFollowMouse,
-				tempInteractiveFrames);
+		if (resetTempIFList)
+			resetTempInteractiveFrame(scene);
 
+		// tempInteractiveFrames = new ArrayList<InteractiveFrame>();
+		if (!switchBrick)
+			for (int i = 0; i < bricks.size(); i++) {
+				bricks.get(i).generateInteractiveFrameForSpecialCase2(
+						brickFollowMouse, tempInteractiveFrames);
+			}
+		else {
+			for (int i = 0; i < bricks.size(); i++) {
+				bricks.get(i).generateInteractiveFrameForSpecialCase2(brick,
+						tempInteractiveFrames);
+			}
+		}
+
+		resetTempIFList = false;
+
+	}
+
+	public boolean isSwitchBrick() {
+		return switchBrick;
+	}
+
+	public void setSwitchBrick(boolean switchBrick) {
+		this.switchBrick = switchBrick;
+	}
+
+	public boolean isResetTempIFList() {
+		return resetTempIFList;
+	}
+
+	public void setResetTempIFList(boolean resetTempIFList) {
+		this.resetTempIFList = resetTempIFList;
+	}
+
+	private void resetTempInteractiveFrame(Scene scene) {
+		for (int i = 0; i < tempInteractiveFrames.size(); i++) {
+			tempInteractiveFrames.get(i).removeFromAgentPool(
+					scene.motionAgent());
+		}
+
+		tempInteractiveFrames = new ArrayList<InteractiveFrame>();
 	}
 
 	public void generateInteractiveFrameForSpecialCase(Brick baseBrick,

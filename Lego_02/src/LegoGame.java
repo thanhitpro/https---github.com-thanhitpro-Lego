@@ -13,7 +13,6 @@ import remixlab.proscene.*;
 public class LegoGame extends PApplet {
 
 	Scene scene;
-
 	GameManager gameManager;
 
 	public void setup() {
@@ -47,7 +46,7 @@ public class LegoGame extends PApplet {
 				// j).applyTransformation();
 				gameManager.getPlaneLego().getInteractiveFrames()
 						.get(i * Util.PLANE_WIDTH + j).applyTransformation();
-				scene.drawAxes(1);
+				drawAxes();
 				popMatrix();
 				pushMatrix();
 				gameManager
@@ -64,8 +63,9 @@ public class LegoGame extends PApplet {
 										i * Util.PLANE_WIDTH + j, null, 0));
 				// Draw plane
 				shape(gameManager.getPlaneLego().getpShapes()
-						.get(i * Util.PLANE_WIDTH + j), i * Util.BRICK_SIZE, j
-						* Util.BRICK_SIZE);
+						.get(i * Util.PLANE_WIDTH + j),
+						(i - Util.PLANE_WIDTH / 2) * Util.BRICK_SIZE,
+						(j - Util.PLANE_HEIGHT / 2) * Util.BRICK_SIZE);
 				popMatrix();
 			}
 		}
@@ -77,7 +77,7 @@ public class LegoGame extends PApplet {
 					.getDotInteractiveFrameList().size(); j++) {
 				gameManager.getBricks().get(i).getDotInteractiveFrameList()
 						.get(j).applyTransformation();
-				scene.drawAxes(++j);
+				drawAxes();
 			}
 			popMatrix();
 
@@ -151,7 +151,7 @@ public class LegoGame extends PApplet {
 			// planeLego.getInteractiveFrames().get(i * width +
 			// j).applyTransformation();
 			gameManager.getTempInteractiveFrames().get(f).applyTransformation();
-			scene.drawAxes(1);
+			drawAxes();
 			popMatrix();
 
 			pushMatrix();
@@ -165,6 +165,11 @@ public class LegoGame extends PApplet {
 		// saveState();
 		// gameManager.drawGUI();
 		// restoreState();
+	}
+
+	private void drawAxes() {
+		if (Util.DRAW_AXES)
+			scene.drawAxes(1);
 	}
 
 	void saveState() {
@@ -271,8 +276,7 @@ public class LegoGame extends PApplet {
 				gameManager.setBrickFollowMouse(brick);
 				// gameManager.generateInteractiveFrameForSpecialCase(brickConsistIFrame,
 				// positionOfInteractiveFrame);
-				gameManager
-						.generateInteractiveFrameForSpecialCase2(brickConsistIFrame);
+				// gameManager.generateInteractiveFrameForSpecialCase2(brickConsistIFrame);
 				return color(200, 200, 0);
 			} catch (NoSuchMethodException | SecurityException
 					| InstantiationException | IllegalAccessException
@@ -316,6 +320,8 @@ public class LegoGame extends PApplet {
 		/*
 		 * Increase the angle
 		 */
+
+		Brick tempBrick = null;
 		if (gameManager.getBrickFollowMouse() == null)
 			return;
 		gameManager.getBrickFollowMouse().calibrateAfterRotate();
@@ -324,6 +330,7 @@ public class LegoGame extends PApplet {
 			gameManager.getBrickFollowMouse().getRotate()
 					.add(0, Util.ROTATE_ANGLE_ADDED, 0);
 			gameManager.getBrickFollowMouse().decreaseTimesRotate();
+			gameManager.setSwitchBrick(false);
 		}
 
 		/*
@@ -333,22 +340,34 @@ public class LegoGame extends PApplet {
 			gameManager.getBrickFollowMouse().getRotate()
 					.subtract(0, Util.ROTATE_ANGLE_ADDED, 0);
 			gameManager.getBrickFollowMouse().increaseTimesRotate();
+			gameManager.setSwitchBrick(false);
 		}
 
-		if (key == '1') {
+		if (Util.KEY_SWITCH_BRICK.indexOf(key) != -1) {
+			// Process switching brick
 			gameManager.getCurBrick().setModelName(
-					Util.MODEL_NAME_LIST.get((0)));
-			gameManager.setGeneratedTempIF(false);
+					Util.MODEL_NAME_LIST.get((Integer.parseInt(String
+							.valueOf(key)) - 1)));
+			gameManager.setSwitchBrick(true);
 			// gameManager.getTempInteractiveFrames().clear();
+
+			try {
+				tempBrick = gameManager.getBrickFactory().createBrick(
+						gameManager.getCurBrick().getModelName());
+				tempBrick
+						.setModelName(gameManager.getCurBrick().getModelName());
+			} catch (NoSuchMethodException | SecurityException
+					| InstantiationException | IllegalAccessException
+					| IllegalArgumentException | InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
-		if (key == '2') {
-			gameManager.getCurBrick().setModelName(
-					Util.MODEL_NAME_LIST.get((1)));
-			gameManager.setGeneratedTempIF(false);
-			// gameManager.getTempInteractiveFrames().clear();
-		}
+		gameManager.setGeneratedTempIF(false);
+		gameManager.setResetTempIFList(true);
 
+		gameManager.generateInteractiveFrameForSpecialCase2(tempBrick, scene);
 	}
 
 	public void mouseClicked() {
@@ -379,6 +398,10 @@ public class LegoGame extends PApplet {
 			brick.setId(gameManager.getBricks().size());
 			gameManager.updateInteractiveFrameCollection(brick);
 			gameManager.getBricks().add(brick);
+			gameManager.setGeneratedTempIF(false);
+			gameManager.setResetTempIFList(true);
+			gameManager.setSwitchBrick(false);
+			gameManager.generateInteractiveFrameForSpecialCase2(null, scene);
 		} catch (NoSuchMethodException | SecurityException
 				| InstantiationException | IllegalAccessException
 				| IllegalArgumentException | InvocationTargetException e) {
@@ -409,8 +432,8 @@ public class LegoGame extends PApplet {
 	}
 
 	private void setupPlane() {
-		for (int i = 0; i < Util.PLANE_WIDTH; i++) {
-			for (int j = 0; j < Util.PLANE_HEIGHT; j++) {
+		for (int i = -(Util.PLANE_WIDTH / 2); i < Util.PLANE_WIDTH / 2; i++) {
+			for (int j = -(Util.PLANE_HEIGHT / 2); j < Util.PLANE_HEIGHT / 2; j++) {
 				/*
 				 * Create interactive frame for plane We have an 10x10 plane
 				 */

@@ -14,8 +14,8 @@ import remixlab.proscene.Scene;
 
 public class Util {
 	public static String BRICK_2x1 = "brick_2x1";
-	public static int PLANE_WIDTH = 10;
-	public static int PLANE_HEIGHT = 10;
+	public static int PLANE_WIDTH = 20;
+	public static int PLANE_HEIGHT = 20;
 	public static int BRICK_SIZE = 20;
 	public static int MODEL_SCALE = 2;
 	public static int OBJECT_SCALE = 5;
@@ -30,9 +30,10 @@ public class Util {
 	public static ArrayList<Vec> CALIBRATE_VEC_MODEL;
 	public static ArrayList<Vec> EXTRA_POSITION_VEC;
 	public static double PI = Math.PI;
-	public static int THRESHOLD_VALUE = 30;
+	public static int THRESHOLD_VALUE = 20;
 	public static Dictionary<String, ArrayList<InteractiveFrame>> interactiveFrameDictionary = new Hashtable<String, ArrayList<InteractiveFrame>>();
-
+	public static String KEY_SWITCH_BRICK = "0123456789";
+	public static boolean DRAW_AXES = true;
 	public static String FONT_FILE_NAME_DEFAULT = "SegoeUI-Light-48.vlw";
 	public static int FONT_SIZE_DEFAULT = 48;
 

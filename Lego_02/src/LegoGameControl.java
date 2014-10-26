@@ -131,8 +131,8 @@ public class LegoGameControl extends PApplet {
 			for (int j = 0; j < height; j++) {
 				// Draw interactive frame on screen
 				pushMatrix();
-				planeLego.getInteractiveFrames().get(i * width + j).applyTransformation();
-				//listFrame.get(i * width + j).applyTransformation();
+				planeLego.getInteractiveFrames().get(i * width + j).applyWorldTransformation();
+				//listFrame.get(i * width + j).applyWorldTransformation();
 				popMatrix();
 				pushMatrix();
 				planeLego.getpShapes().get(i * width + j).setFill(
@@ -152,7 +152,7 @@ public class LegoGameControl extends PApplet {
 			ArrayList<InteractiveFrame> listBrickInteractive = bricks.get(i).getDotInteractiveFrameList();
 			for (int k = 0; k < listBrickInteractive.size(); k++) {
 				pushMatrix();
-				listBrickInteractive.get(k).applyTransformation();
+				listBrickInteractive.get(k).applyWorldTransformation();
 				popMatrix();
 				pushMatrix();
 				fill(setColor(
