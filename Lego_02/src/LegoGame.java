@@ -29,12 +29,16 @@ public class LegoGame extends PApplet {
 		setupGameManager();
 		scene.disableKeyboardAgent();
 		Util.CURRENT_SCENE = scene;
+		scene.camera().setPosition(new Vec(0, 0, 270));
+		//scene.camera().setUpVector(new Vec(1, 1, -1));
 	}
 
 	public void draw() {
 		setupDisplay();
 		// gameManager.drawGUI();
 		drawScene();
+		
+		
 	}
 
 	private void drawScene() {
