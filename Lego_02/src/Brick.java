@@ -3,6 +3,9 @@ import java.util.ArrayList;
 import remixlab.dandelion.core.InteractiveFrame;
 import remixlab.dandelion.geom.Vec;
 import saito.objloader.OBJModel;
+import xml.XmlBoxCollider;
+import xml.XmlBrick;
+import xml.XmlInteractiveFrame;
 
 public class Brick implements DrawableObject {
 	protected OBJModel model;
@@ -11,19 +14,20 @@ public class Brick implements DrawableObject {
 	protected ArrayList<Vec> centerPositionOfDot;
 	protected float scaleRatio;
 	protected Vec rotate;
+	protected XmlBrick xmlBrick;
 	/**
 	 * Position of the brick on Oxyz space
 	 */
 	protected Vec translate;
 	protected BoxCollider boxCollider;
 	/**
-	 * When drawing a brick, according to the model, its must translate 
-	 * a little more
+	 * When drawing a brick, according to the model, its must translate a little
+	 * more
 	 */
 	protected Vec calibrateVec;
 	/**
-	 * When a brick rotate, sometime, the position will be changed like 2x1 brick
-	 * This info helps to re-translate to correct position 
+	 * When a brick rotate, sometime, the position will be changed like 2x1
+	 * brick This info helps to re-translate to correct position
 	 */
 	protected Vec translateForDraw;
 	/**
@@ -198,7 +202,16 @@ public class Brick implements DrawableObject {
 
 	}
 
+	public void generateInteractiveFrame(
+			ArrayList<XmlInteractiveFrame> xmlInteractiveFrames) {
+
+	}
+
 	public void generateBoxCollider() {
+		boxCollider = new BoxCollider();
+	}
+
+	public void generateBoxCollider(ArrayList<XmlBoxCollider> xmlBoxColliders) {
 		boxCollider = new BoxCollider();
 	}
 
@@ -253,9 +266,10 @@ public class Brick implements DrawableObject {
 
 	public void decreaseTimesRotate() {
 	}
-	
-	public void generateInteractiveFrameForSpecialCase2(Brick brickFollowMouse, ArrayList<InteractiveFrame> tempInteractiveFrames) {
-		
+
+	public void generateInteractiveFrameForSpecialCase2(Brick brickFollowMouse,
+			ArrayList<InteractiveFrame> tempInteractiveFrames) {
+
 	}
 
 	/**
@@ -266,7 +280,8 @@ public class Brick implements DrawableObject {
 	}
 
 	/**
-	 * @param sizeBrick the sizeBrick to set
+	 * @param sizeBrick
+	 *            the sizeBrick to set
 	 */
 	public void setSizeBrick(Vec sizeBrick) {
 		this.sizeBrick = Util.clone(sizeBrick);
@@ -287,7 +302,6 @@ public class Brick implements DrawableObject {
 		this.timesRotate = timesRotate;
 	}
 
-	
 	/**
 	 * @return the id
 	 */
@@ -296,7 +310,8 @@ public class Brick implements DrawableObject {
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
 	public void setId(int id) {
 		this.id = id;
@@ -306,12 +321,14 @@ public class Brick implements DrawableObject {
 
 	}
 
+	public void generateInitData() {
+
+	}
+
 	public Brick() {
 		super();
 		dotInteractiveFrameList = new ArrayList<InteractiveFrame>();
 	}
-	
-	
 
 	public Brick(Brick input) {
 		super();
@@ -329,6 +346,14 @@ public class Brick implements DrawableObject {
 		this.originalTranslate = input.originalTranslate;
 		this.timesRotate = input.timesRotate;
 		this.id = -2;
+	}
+
+	public XmlBrick getXmlBrick() {
+		return xmlBrick;
+	}
+
+	public void setXmlBrick(XmlBrick xmlBrick) {
+		this.xmlBrick = xmlBrick;
 	}
 
 	@Override

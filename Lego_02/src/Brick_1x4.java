@@ -4,6 +4,10 @@ import remixlab.dandelion.constraint.AxisPlaneConstraint;
 import remixlab.dandelion.constraint.LocalConstraint;
 import remixlab.dandelion.core.InteractiveFrame;
 import remixlab.dandelion.geom.Vec;
+import xml.XmlBoxCollider;
+import xml.XmlBrick;
+import xml.XmlInteractiveFrame;
+import xml.XmlRotation;
 
 public class Brick_1x4 extends Brick {
 	@Override
@@ -69,10 +73,71 @@ public class Brick_1x4 extends Brick {
 	}
 
 	@Override
+	public void generateInteractiveFrame(
+			ArrayList<XmlInteractiveFrame> xmlInteractiveFrames) {
+		// TODO Auto-generated method stub
+		super.generateInteractiveFrame(xmlInteractiveFrames);
+		for (int i = 0; i < xmlInteractiveFrames.size(); i++) {
+			XmlInteractiveFrame xmlInteractiveFrame = xmlInteractiveFrames
+					.get(i);
+
+			InteractiveFrame iframe1 = new InteractiveFrame(Util.CURRENT_SCENE,
+					null);
+			LocalConstraint XAxis = new LocalConstraint();
+			XAxis.setTranslationConstraint(AxisPlaneConstraint.Type.FORBIDDEN,
+					new Vec(0.0f, 0.0f, 0.0f));
+			XAxis.setRotationConstraint(AxisPlaneConstraint.Type.AXIS, new Vec(
+					1.0f, 0.0f, 0.0f));
+			iframe1.setConstraint(XAxis);
+			iframe1.setScaling(Util.BRICK_SIZE);
+			iframe1.setGrabsInputThreshold(Util.THRESHOLD_VALUE);
+			iframe1.setTranslation(translate.x() + Util.BRICK_SIZE
+					* xmlInteractiveFrame.getPosition().x()
+					+ xmlBrick.getExtraPositionVec().x(), translate.y()
+					+ Util.BRICK_SIZE * xmlInteractiveFrame.getPosition().y()
+					+ xmlBrick.getExtraPositionVec().y(), translate.z()
+					+ Util.BRICK_SIZE * xmlInteractiveFrame.getPosition().z()
+					+ xmlBrick.getExtraPositionVec().z());
+			dotInteractiveFrameList.add(iframe1);
+		}
+	}
+
+	@Override
+	public void generateInitData() {
+		// TODO Auto-generated method stub
+		super.generateInitData();
+
+		// for (int i = 0; i < xmlBrick.getRotations().size(); i++) {
+		XmlRotation xmlRotation = xmlBrick.getRotations().get(timesRotate);
+		generateInteractiveFrame(xmlRotation.getInteractiveFrames());
+		generateBoxCollider(xmlRotation.getBoxColliders());
+		
+		// }
+	}
+
+	@Override
+	public void generateBoxCollider(ArrayList<XmlBoxCollider> xmlBoxColliders) {
+		// TODO Auto-generated method stub
+		super.generateBoxCollider(xmlBoxColliders);
+		ArrayList<Box> boxs = new ArrayList<>();
+		for (int i = 0; i < xmlBoxColliders.size(); i++) {
+			XmlBoxCollider xmlBoxCollider = xmlBoxColliders.get(i);
+			Box box = new Box();
+			box.setPosition(Vec.add(translate,
+					Vec.multiply(xmlBoxCollider.getPosition(), Util.BRICK_SIZE)));
+			box.setWidth(Util.BRICK_SIZE * xmlBoxCollider.getSize().x());
+			box.setHeight(Util.BRICK_SIZE * xmlBoxCollider.getSize().y());
+			box.setDepth(Util.BRICK_SIZE * xmlBoxCollider.getSize().z());
+			boxs.add(box);
+		}
+		boxCollider.setListBox(boxs);
+	}
+
+	@Override
 	public void generateBoxCollider() {
 		// TODO Auto-generated method stub
 		super.generateBoxCollider();
-		ArrayList<Box> boxs = new ArrayList<>();
+		/*ArrayList<Box> boxs = new ArrayList<>();
 		Box box = new Box();
 		box.setPosition(translate);
 		if (timesRotate % 2 == 0) {
@@ -84,7 +149,10 @@ public class Brick_1x4 extends Brick {
 		}
 		box.setDepth(Util.BRICK_SIZE);
 		boxs.add(box);
-		boxCollider.setListBox(boxs);
+
+		boxCollider.setListBox(boxs);*/
+		generateBoxCollider(xmlBrick.getRotations().get(timesRotate)
+				.getBoxColliders());
 	}
 
 	@Override
@@ -110,6 +178,15 @@ public class Brick_1x4 extends Brick {
 		calibrateVec = Util.CALIBRATE_VEC_MODEL.get(Util.MODEL_NAME_LIST
 				.indexOf(modelName));
 		sizeBrick = new Vec(4, 1, 1);
+		if (Util.XML_BRICK_DICTIONARY.get(modelName) != null
+				&& Util.XML_BRICK_DICTIONARY.get(modelName).isFinishLoading()) {
+			this.xmlBrick = Util.XML_BRICK_DICTIONARY.get(modelName);
+		} else {
+			xmlBrick = new XmlBrick();
+			xmlBrick.readXml("Brick_1x4.xml", 0);
+			Util.XML_BRICK_DICTIONARY.put(modelName, xmlBrick);
+
+		}
 	}
 
 	@Override

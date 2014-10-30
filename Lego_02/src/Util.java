@@ -11,6 +11,7 @@ import remixlab.dandelion.constraint.LocalConstraint;
 import remixlab.dandelion.core.InteractiveFrame;
 import remixlab.dandelion.geom.Vec;
 import remixlab.proscene.Scene;
+import xml.XmlBrick;
 
 public class Util {
 	public static String BRICK_2x1 = "brick_2x1";
@@ -36,6 +37,7 @@ public class Util {
 	public static boolean DRAW_AXES = false;
 	public static String FONT_FILE_NAME_DEFAULT = "SegoeUI-Light-48.vlw";
 	public static int FONT_SIZE_DEFAULT = 48;
+	public static Dictionary<String, XmlBrick> XML_BRICK_DICTIONARY= new Hashtable<String, XmlBrick>();
 
 	public static void LoadModelNames() throws IOException {
 		MODEL_NAME_LIST = new ArrayList<String>();

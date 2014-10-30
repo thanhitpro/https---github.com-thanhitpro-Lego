@@ -7,7 +7,7 @@ import remixlab.dandelion.constraint.AxisPlaneConstraint;
 import remixlab.dandelion.constraint.LocalConstraint;
 import remixlab.dandelion.core.InteractiveFrame;
 import remixlab.dandelion.geom.Vec;
-import remixlab.proscene.*;
+import remixlab.proscene.Scene;
 
 @SuppressWarnings("serial")
 public class LegoGame extends PApplet {
@@ -29,7 +29,7 @@ public class LegoGame extends PApplet {
 		setupGameManager();
 		scene.disableKeyboardAgent();
 		Util.CURRENT_SCENE = scene;
-		scene.camera().setPosition(new Vec(0, 0, 270));
+		scene.camera().setPosition(new Vec(0, 0, 280));		
 		//scene.camera().setUpVector(new Vec(1, 1, -1));
 	}
 
@@ -37,8 +37,6 @@ public class LegoGame extends PApplet {
 		setupDisplay();
 		// gameManager.drawGUI();
 		drawScene();
-		
-		
 	}
 
 	private void drawScene() {
@@ -88,7 +86,7 @@ public class LegoGame extends PApplet {
 			pushMatrix();
 
 			for (int j = 0; j < gameManager.getBricks().get(i)
-					.getDotInteractiveFrameList().size(); j++) {
+					.getDotInteractiveFrameList().size(); j++) {				
 				fill(setColor(
 						gameManager.getBricks().get(i)
 								.getDotInteractiveFrameList().get(j)
@@ -401,9 +399,10 @@ public class LegoGame extends PApplet {
 			brick.setTimesRotate(gameManager.getBrickFollowMouse()
 					.getTimesRotate());
 			brick.setTranslateForDraw(gameManager.getBrickFollowMouse()
-					.getTranslateForDraw());
-			brick.generateInteractiveFrame();
-			brick.generateBoxCollider();
+					.getTranslateForDraw());			
+			//brick.generateInteractiveFrame();
+			//brick.generateBoxCollider();
+			brick.generateInitData();
 			brick.generateCenterPositionOfDot();
 			brick.setId(gameManager.getBricks().size());
 			gameManager.updateInteractiveFrameCollection(brick);
