@@ -20,6 +20,7 @@ public class XmlBrick {
 	Vec extraPositionVec;
 	int numberOfTimeRotation;
 	boolean finishLoading = false;
+	int numberOfInteractiveFrame;
 
 	ArrayList<XmlRotation> rotations;
 
@@ -254,6 +255,7 @@ public class XmlBrick {
 								+ "']/interactiveframes/@numberofinteractiveframe");
 				xmlRotation
 						.setNumberOfInteractiveFrame(numberOfInteractiveFrame);
+				this.setNumberOfInteractiveFrame(numberOfInteractiveFrame);
 				for (int j = 0; j < numberOfInteractiveFrame; j++) {
 					XmlInteractiveFrame interactiveFrame = new XmlInteractiveFrame();
 					interactiveFrame.setPosition(new Vec(getIntValue(xPath,
@@ -282,6 +284,14 @@ public class XmlBrick {
 		}
 		System.out.println("Finish");
 
+	}
+
+	public int getNumberOfInteractiveFrame() {
+		return numberOfInteractiveFrame;
+	}
+
+	public void setNumberOfInteractiveFrame(int numberOfInteractiveFrame) {
+		this.numberOfInteractiveFrame = numberOfInteractiveFrame;
 	}
 
 	public boolean isFinishLoading() {

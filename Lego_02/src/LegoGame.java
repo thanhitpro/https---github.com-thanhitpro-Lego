@@ -326,7 +326,7 @@ public class LegoGame extends PApplet {
 		Brick tempBrick = null;
 		if (gameManager.getBrickFollowMouse() == null)
 			return;
-		gameManager.getBrickFollowMouse().calibrateAfterRotate();
+		//gameManager.getBrickFollowMouse().calibrateAfterRotate();
 
 		boolean flagCheckKeyCode = false;
 		if (key == 't' || key == 'T' || keyCode == 37) {
@@ -348,6 +348,8 @@ public class LegoGame extends PApplet {
 			flagCheckKeyCode = true;
 		}
 
+		gameManager.getBrickFollowMouse().calibrateAfterRotate();
+		
 		if (Util.KEY_SWITCH_BRICK.indexOf(key) != -1) {
 			flagCheckKeyCode = true;
 			// Process switching brick
@@ -399,11 +401,13 @@ public class LegoGame extends PApplet {
 			brick.setTimesRotate(gameManager.getBrickFollowMouse()
 					.getTimesRotate());
 			brick.setTranslateForDraw(gameManager.getBrickFollowMouse()
-					.getTranslateForDraw());			
+					.getTranslateForDraw());	
+			
 			//brick.generateInteractiveFrame();
 			//brick.generateBoxCollider();
+			//brick.generateCenterPositionOfDot();
+			
 			brick.generateInitData();
-			brick.generateCenterPositionOfDot();
 			brick.setId(gameManager.getBricks().size());
 			gameManager.updateInteractiveFrameCollection(brick);
 			gameManager.getBricks().add(brick);

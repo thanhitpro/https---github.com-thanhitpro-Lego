@@ -394,12 +394,12 @@ public class GameManager {
 		// tempInteractiveFrames = new ArrayList<InteractiveFrame>();
 		if (!switchBrick)
 			for (int i = 0; i < bricks.size(); i++) {
-				bricks.get(i).generateInteractiveFrameForSpecialCase2(
+				bricks.get(i).generateInteractiveFrameForSpecialCase(
 						brickFollowMouse, tempInteractiveFrames);
 			}
 		else {
 			for (int i = 0; i < bricks.size(); i++) {
-				bricks.get(i).generateInteractiveFrameForSpecialCase2(brick,
+				bricks.get(i).generateInteractiveFrameForSpecialCase(brick,
 						tempInteractiveFrames);
 			}
 		}

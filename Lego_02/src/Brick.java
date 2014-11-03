@@ -1,11 +1,15 @@
 import java.util.ArrayList;
 
+import remixlab.dandelion.constraint.AxisPlaneConstraint;
+import remixlab.dandelion.constraint.LocalConstraint;
 import remixlab.dandelion.core.InteractiveFrame;
 import remixlab.dandelion.geom.Vec;
 import saito.objloader.OBJModel;
 import xml.XmlBoxCollider;
 import xml.XmlBrick;
+import xml.XmlCenterPositionOfDot;
 import xml.XmlInteractiveFrame;
+import xml.XmlRotation;
 
 public class Brick implements DrawableObject {
 	protected OBJModel model;
@@ -204,19 +208,87 @@ public class Brick implements DrawableObject {
 
 	public void generateInteractiveFrame(
 			ArrayList<XmlInteractiveFrame> xmlInteractiveFrames) {
+		for (int i = 0; i < xmlInteractiveFrames.size(); i++) {
+			XmlInteractiveFrame xmlInteractiveFrame = xmlInteractiveFrames
+					.get(i);
 
+			InteractiveFrame iframe1 = new InteractiveFrame(Util.CURRENT_SCENE,
+					null);
+			LocalConstraint XAxis = new LocalConstraint();
+			XAxis.setTranslationConstraint(AxisPlaneConstraint.Type.FORBIDDEN,
+					new Vec(0.0f, 0.0f, 0.0f));
+			XAxis.setRotationConstraint(AxisPlaneConstraint.Type.AXIS, new Vec(
+					1.0f, 0.0f, 0.0f));
+			iframe1.setConstraint(XAxis);
+			iframe1.setScaling(Util.BRICK_SIZE);
+			iframe1.setGrabsInputThreshold(Util.THRESHOLD_VALUE);
+			iframe1.setTranslation(translate.x() + Util.BRICK_SIZE
+					* xmlInteractiveFrame.getPosition().x()
+					+ xmlBrick.getExtraPositionVec().x(), translate.y()
+					+ Util.BRICK_SIZE * xmlInteractiveFrame.getPosition().y()
+					+ xmlBrick.getExtraPositionVec().y(), translate.z()
+					+ Util.BRICK_SIZE * xmlInteractiveFrame.getPosition().z()
+					+ xmlBrick.getExtraPositionVec().z());
+			dotInteractiveFrameList.add(iframe1);
+		}
 	}
 
 	public void generateBoxCollider() {
 		boxCollider = new BoxCollider();
+		generateBoxCollider(xmlBrick.getRotations().get(timesRotate)
+				.getBoxColliders());
 	}
 
 	public void generateBoxCollider(ArrayList<XmlBoxCollider> xmlBoxColliders) {
 		boxCollider = new BoxCollider();
+		ArrayList<Box> boxs = new ArrayList<>();
+		for (int i = 0; i < xmlBoxColliders.size(); i++) {
+			XmlBoxCollider xmlBoxCollider = xmlBoxColliders.get(i);
+			Box box = new Box();
+			box.setPosition(Vec.add(translate,
+					Vec.multiply(xmlBoxCollider.getPosition(), Util.BRICK_SIZE)));
+			box.setWidth(Util.BRICK_SIZE * xmlBoxCollider.getSize().x());
+			box.setHeight(Util.BRICK_SIZE * xmlBoxCollider.getSize().y());
+			box.setDepth(Util.BRICK_SIZE * xmlBoxCollider.getSize().z());
+			boxs.add(box);
+		}
+		boxCollider.setListBox(boxs);
 	}
 
 	public void generateCenterPositionOfDot() {
 		centerPositionOfDot = new ArrayList<Vec>();
+		for (int i = 0; i < dotInteractiveFrameList.size(); i++) {
+			Vec centerPosition = new Vec(dotInteractiveFrameList.get(i)
+					.position().x()
+					+ Util.BRICK_SIZE / 2, dotInteractiveFrameList.get(i)
+					.position().y()
+					+ Util.BRICK_SIZE / 2, dotInteractiveFrameList.get(i)
+					.position().z()
+					- Util.BRICK_SIZE / 2);
+			centerPositionOfDot.add(centerPosition);
+		}
+	}
+
+	public void generateCenterPositionOfDot(
+			ArrayList<XmlCenterPositionOfDot> xmlCenterPositionOfDots) {
+		centerPositionOfDot = new ArrayList<Vec>();
+		for (int i = 0; i < xmlCenterPositionOfDots.size(); i++) {
+			XmlCenterPositionOfDot xmlCenterPositionOfDot = xmlCenterPositionOfDots
+					.get(i);
+
+			Vec centerPosition = new Vec(translate.x() + Util.BRICK_SIZE
+					* xmlCenterPositionOfDot.getPosition().x()
+					+ xmlBrick.getExtraPositionVec().x() + Util.BRICK_SIZE / 2,
+					translate.y() + Util.BRICK_SIZE
+							* xmlCenterPositionOfDot.getPosition().y()
+							+ xmlBrick.getExtraPositionVec().y()
+							+ Util.BRICK_SIZE / 2, translate.z()
+							+ Util.BRICK_SIZE
+							* xmlCenterPositionOfDot.getPosition().z()
+							+ xmlBrick.getExtraPositionVec().z()
+							+ Util.BRICK_SIZE / 2);
+			centerPositionOfDot.add(centerPosition);
+		}
 	}
 
 	@Override
@@ -262,13 +334,87 @@ public class Brick implements DrawableObject {
 	}
 
 	public void increaseTimesRotate() {
+		if (timesRotate == (xmlBrick.getNumberOfTimeRotation() - 1)) {
+			timesRotate = 0;
+			// sizeBrick = new Vec(1, 4, 1);
+		} else {
+			timesRotate++;
+			// sizeBrick = new Vec(4, 1, 1);
+		}
+
+		sizeBrick = xmlBrick.getRotations().get(timesRotate).getSizeBrick();
 	}
 
 	public void decreaseTimesRotate() {
+		if (timesRotate == 0) {
+			timesRotate = xmlBrick.getNumberOfTimeRotation();
+			// sizeBrick = new Vec(1, 4, 1);
+		} else {
+			timesRotate--;
+			// sizeBrick = new Vec(4, 1, 1);
+		}
+
+		sizeBrick = xmlBrick.getRotations().get(timesRotate).getSizeBrick();
 	}
 
 	public void generateInteractiveFrameForSpecialCase2(Brick brickFollowMouse,
 			ArrayList<InteractiveFrame> tempInteractiveFrames) {
+
+	}
+
+	public void generateInteractiveFrameForSpecialCase(Brick brickFollowMouse,
+			ArrayList<InteractiveFrame> tempInteractiveFrames) {
+		int w = (int) brickFollowMouse.getSizeBrick().x();
+		int h = (int) brickFollowMouse.getSizeBrick().y();
+
+		ArrayList<InteractiveFrame> tempIF = new ArrayList<InteractiveFrame>();
+
+		for (int k = 0; k < xmlBrick.getRotations().get(timesRotate)
+				.getInteractiveFrames().size(); k++) {
+			XmlInteractiveFrame xmlInteractiveFrame = xmlBrick.getRotations()
+					.get(timesRotate).getInteractiveFrames().get(k);
+			Vec startGeneratePosition = new Vec(this.translate.x()
+					+ xmlInteractiveFrame.getPosition().x() * Util.BRICK_SIZE,
+					this.translate.y() + xmlInteractiveFrame.getPosition().y()
+							* Util.BRICK_SIZE, this.translate.z()
+							+ xmlInteractiveFrame.getPosition().z()
+							* Util.BRICK_SIZE);
+
+			for (int i = -(w - 1); i <= 0; i++) {
+				for (int j = -(h - 1); j <= 0; j++) {
+					if (i == j && j == 0)
+						continue;
+					Vec framePosition = new Vec(startGeneratePosition.x() + i
+							* Util.BRICK_SIZE, startGeneratePosition.y() + j
+							* Util.BRICK_SIZE, this
+							.getDotInteractiveFrameList().get(0).position().z());
+
+					if (Util.CheckExistInteractiveFrame(tempInteractiveFrames,
+							framePosition))
+						continue;
+
+					InteractiveFrame iframe1 = new InteractiveFrame(
+							Util.CURRENT_SCENE, null);
+					LocalConstraint XAxis = new LocalConstraint();
+					XAxis.setTranslationConstraint(
+							AxisPlaneConstraint.Type.FORBIDDEN, new Vec(0.0f,
+									0.0f, 0.0f));
+					XAxis.setRotationConstraint(AxisPlaneConstraint.Type.AXIS,
+							new Vec(1.0f, 0.0f, 0.0f));
+					iframe1.setConstraint(XAxis);
+					iframe1.setScaling(Util.BRICK_SIZE);
+					iframe1.setTranslation(framePosition.x(),
+							framePosition.y(), framePosition.z());
+					iframe1.setGrabsInputThreshold(Util.THRESHOLD_VALUE);
+					tempInteractiveFrames.add(iframe1);
+					tempIF.add(iframe1);
+				}
+			}
+		}
+
+		if (tempIF.size() > 0)
+			Util.interactiveFrameDictionary.put(
+					brickFollowMouse.getModelName(), tempIF);
 
 	}
 
@@ -300,6 +446,7 @@ public class Brick implements DrawableObject {
 	 */
 	public void setTimesRotate(int timesRotate) {
 		this.timesRotate = timesRotate;
+		sizeBrick = xmlBrick.getRotations().get(timesRotate).getSizeBrick();
 	}
 
 	/**
@@ -318,11 +465,15 @@ public class Brick implements DrawableObject {
 	}
 
 	public void calibrateAfterRotate() {
-
+		translateForDraw = xmlBrick.getRotations().get(timesRotate)
+				.getTranslateForDraw();
 	}
 
 	public void generateInitData() {
-
+		XmlRotation xmlRotation = xmlBrick.getRotations().get(timesRotate);
+		generateInteractiveFrame(xmlRotation.getInteractiveFrames());
+		generateBoxCollider(xmlRotation.getBoxColliders());
+		generateCenterPositionOfDot(xmlRotation.getCenterPostionOfDots());
 	}
 
 	public Brick() {
