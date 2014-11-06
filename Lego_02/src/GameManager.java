@@ -355,7 +355,7 @@ public class GameManager {
 		// TODO Auto-generated method stub
 		for (int i = 0; i < Util.MODEL_NAME_LIST.size(); i++) {
 			OBJModel objModel = new OBJModel(pApplet);
-			objModel.load(Util.MODEL_NAME_LIST.get(i) + ".obj");
+			objModel.load("S:\\Lego Project\\Github project\\Lego\\https---github.com-thanhitpro-Lego.git\\Lego_02\\src\\" + Util.MODEL_NAME_LIST.get(i) + ".obj");
 			objModel.enableDebug();
 			objModel.scale(Util.MODEL_SCALE);
 			objModel.translateToCenter();

@@ -15,14 +15,14 @@ import xml.XmlBrick;
 
 public class Util {
 	public static String BRICK_2x1 = "brick_2x1";
-	public static int PLANE_WIDTH = 20;
-	public static int PLANE_HEIGHT = 20;
+	public static int PLANE_WIDTH = 10;
+	public static int PLANE_HEIGHT = 10;
 	public static int BRICK_SIZE = 20;
 	public static int MODEL_SCALE = 2;
 	public static int OBJECT_SCALE = 5;
-	public static String MODEL_NAME_FILE = "ModelNameList.txt";
-	public static String CALIBRATE_VEC_FILE = "CalibrateVecList.txt";
-	public static String EXTRA_POSITION_VEC_FILE = "ExtraPostionVec.txt";
+	public static String MODEL_NAME_FILE = "S:\\Lego Project\\Github project\\Lego\\https---github.com-thanhitpro-Lego.git\\Lego_02\\src\\ModelNameList.txt";
+	public static String CALIBRATE_VEC_FILE = "S:\\Lego Project\\Github project\\Lego\\https---github.com-thanhitpro-Lego.git\\Lego_02\\src\\CalibrateVecList.txt";
+	public static String EXTRA_POSITION_VEC_FILE = "S:\\Lego Project\\Github project\\Lego\\https---github.com-thanhitpro-Lego.git\\Lego_02\\src\\ExtraPostionVec.txt";
 	public static ArrayList<String> MODEL_NAME_LIST;
 	public static Vec DEFAULT_ROTATE = new Vec(-3.14159265359f / 2, 0, 0);
 	public static float ROTATE_ANGLE_ADDED = 3.14159265359f / 2;
