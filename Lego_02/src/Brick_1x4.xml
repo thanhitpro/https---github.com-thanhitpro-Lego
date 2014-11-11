@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <brick>
-   <models numberofmodel = "3">
+   <models numberofmodel = "8">
+   
     <model id="0">
-         <name>Brick_2x1          </name>
+         <name>Brick_2x1</name>
          <defaultsizebrick x="2" y="1" z="1" />
          <calibratevec x="10" y="0" z="14" />
          <extrapositionvec x="0" y="0" z="4" />
@@ -77,6 +78,7 @@
             </rotation>
          </rotations>
       </model>
+      
       <model id="1">
          <name>Roof_tile_2x2</name>
          <defaultsizebrick x="2" y="2" z="1" />
@@ -245,6 +247,7 @@
             </rotation>
          </rotations>
       </model>
+      
 	  <model id="2">
          <name>Brick_1x4</name>
          <defaultsizebrick x="4" y="1" z="1" />
@@ -357,5 +360,469 @@
             </rotation>
          </rotations>
       </model>
+      
+    <model id="3">
+    <name>Brick_1x3</name>  
+    <defaultsizebrick x="3" y="1" z="1" />
+    <calibratevec x="10" y="0" z="14" />
+    <extrapositionvec x="0" y="0" z="4" />
+    <rotations numberofrotation="2">
+       <rotation id="0">
+          <sizebrick x="3" y="1" z="1" />
+          <translatefordraw x="0" y="0" z="0" />
+          <dots numberofdot="3">
+             <dot id="0">
+                <position x="0" y="0" z="0" />
+             </dot>
+             <dot id="1">
+                <position x="1" y="0" z="0" />
+             </dot>
+             <dot id="2">
+                <position x="2" y="0" z="0" />
+             </dot>
+          </dots>
+          <boxcolliders numberofboxcolider="1">
+             <box id="0">
+                <position x="0" y="0" z="0" />
+                <size width="3" height="1" depth="1" />
+             </box>
+          </boxcolliders>
+          <centerpositionofdots numberofcenterofdot="2">
+             <centerpositionofdot id="0">
+                <position x="0" y="0" z="0" />
+                  </centerpositionofdot>
+             <centerpositionofdot id="1">
+                <position x="1" y="0" z="0" />
+             </centerpositionofdot>
+             <centerpositionofdot id="2">
+                <position x="2" y="0" z="0" />
+             </centerpositionofdot>
+          </centerpositionofdots>
+          <interactiveframes scale="1" threshold="1" numberofinteractiveframe="3">
+             <if id="0">
+                <position x="0" y="0" z="1" />
+             </if>
+             <if id="1">
+                <position x="1" y="0" z="1" />
+             </if>
+             <if id="2">
+                <position x="2" y="0" z="1" />
+             </if>
+          </interactiveframes>
+       </rotation>
+       <rotation id="1">
+          <sizebrick x="1" y="3" z="1" />
+          <translatefordraw x="0" y="0" z="0" />
+          <dots numberofdot="3">
+             <dot id="0">
+                <position x="0" y="0" z="0" />
+             </dot>
+             <dot id="1">
+                <position x="0" y="1" z="0" />
+             </dot>
+             <dot id="2">
+                <position x="0" y="2" z="0" />
+             </dot>
+          </dots>
+          <boxcolliders numberofboxcolider="1">
+             <box id="0">
+                <position x="0" y="0" z="0" />
+                <size width="1" height="3" depth="1" />
+             </box>
+          </boxcolliders>
+          <centerpositionofdots numberofcenterofdot="3">
+             <centerpositionofdot id="0">
+                <position x="0" y="0" z="0" />
+                  </centerpositionofdot>
+             <centerpositionofdot id="1">
+                <position x="0" y="1" z="0" />
+             </centerpositionofdot>
+             <centerpositionofdot id="2">
+                <position x="0" y="2" z="0" />
+             </centerpositionofdot>
+          </centerpositionofdots>
+          <interactiveframes scale="1" threshold="1" numberofinteractiveframe="3">
+             <if id="0">
+                <position x="0" y="0" z="1" />
+             </if>
+             <if id="1">
+                <position x="0" y="1" z="1" />
+             </if>
+             <if id="2">
+                <position x="0" y="2" z="1" />
+             </if>
+          </interactiveframes>
+       </rotation>
+    </rotations>
+    </model>
+    
+    <model id="4">
+    <name>Brick_1x1</name>  
+    <defaultsizebrick x="1" y="1" z="1" />
+    <calibratevec x="10" y="0" z="14" />
+    <extrapositionvec x="0" y="0" z="4" />
+    <rotations numberofrotation="1">
+       <rotation id="0">
+          <sizebrick x="1" y="1" z="1" />
+          <translatefordraw x="0" y="0" z="0" />
+          <dots numberofdot="1">
+             <dot id="0">
+                <position x="0" y="0" z="0" />
+             </dot>
+          </dots>
+          <boxcolliders numberofboxcolider="1">
+             <box id="0">
+                <position x="0" y="0" z="0" />
+                <size width="1" height="1" depth="1" />
+             </box>
+          </boxcolliders>
+          <centerpositionofdots numberofcenterofdot="1">
+             <centerpositionofdot id="0">
+                <position x="0" y="0" z="0" />
+             </centerpositionofdot>
+          </centerpositionofdots>
+          <interactiveframes scale="1" threshold="1" numberofinteractiveframe="1">
+             <if id="0">
+                <position x="0" y="0" z="1" />
+             </if>
+          </interactiveframes>
+       </rotation>
+    </rotations>
+    </model>
+    
+    <model id="5">
+    <name>Brick_1x6</name>  
+    <defaultsizebrick x="6" y="1" z="1" />
+    <calibratevec x="10" y="0" z="14" />
+    <extrapositionvec x="0" y="0" z="4" />
+    <rotations numberofrotation="2">
+       <rotation id="0">
+          <sizebrick x="6" y="1" z="1" />
+          <translatefordraw x="0" y="0" z="0" />
+          <dots numberofdot="6">
+             <dot id="0">
+                <position x="0" y="0" z="0" />
+             </dot>
+             <dot id="1">
+                <position x="1" y="0" z="0" />
+             </dot>
+             <dot id="2">
+                <position x="2" y="0" z="0" />
+             </dot>
+             <dot id="3">
+                <position x="3" y="0" z="0" />
+             </dot>
+             <dot id="4">
+                <position x="4" y="0" z="0" />
+             </dot>
+             <dot id="5">
+                <position x="5" y="0" z="0" />
+             </dot>
+          </dots>
+          <boxcolliders numberofboxcolider="1">
+             <box id="0">
+                <position x="0" y="0" z="0" />
+                <size width="6" height="1" depth="1" />
+             </box>
+          </boxcolliders>
+          <centerpositionofdots numberofcenterofdot="6">
+             <centerpositionofdot id="0">
+                <position x="0" y="0" z="0" />
+                  </centerpositionofdot>
+             <centerpositionofdot id="1">
+                <position x="1" y="0" z="0" />
+             </centerpositionofdot>
+             <centerpositionofdot id="2">
+                <position x="2" y="0" z="0" />
+             </centerpositionofdot>
+             <centerpositionofdot id="3">
+                <position x="3" y="0" z="0" />
+             </centerpositionofdot>
+             <centerpositionofdot id="4">
+                <position x="4" y="0" z="0" />
+             </centerpositionofdot>
+             <centerpositionofdot id="5">
+                <position x="5" y="0" z="0" />
+             </centerpositionofdot>
+          </centerpositionofdots>
+          <interactiveframes scale="1" threshold="1" numberofinteractiveframe="6">
+             <if id="0">
+                <position x="0" y="0" z="1" />
+             </if>
+             <if id="1">
+                <position x="1" y="0" z="1" />
+             </if>
+             <if id="2">
+                <position x="2" y="0" z="1" />
+             </if>
+             <if id="3">
+                <position x="3" y="0" z="1" />
+             </if>
+             <if id="4">
+                <position x="4" y="0" z="1" />
+             </if>
+             <if id="5">
+                <position x="5" y="0" z="1" />
+             </if>
+          </interactiveframes>
+       </rotation>
+       <rotation id="1">
+          <sizebrick x="1" y="6" z="1" />
+          <translatefordraw x="0" y="0" z="0" />
+          <dots numberofdot="6">
+             <dot id="0">
+                <position x="0" y="0" z="0" />
+             </dot>
+             <dot id="1">
+                <position x="0" y="1" z="0" />
+             </dot>
+             <dot id="2">
+                <position x="0" y="2" z="0" />
+             </dot>
+             <dot id="3">
+                <position x="0" y="3" z="0" />
+             </dot>
+             <dot id="4">
+                <position x="0" y="4" z="0" />
+             </dot>
+             <dot id="5">
+                <position x="0" y="5" z="0" />
+             </dot>
+          </dots>
+          <boxcolliders numberofboxcolider="1">
+             <box id="0">
+                <position x="0" y="0" z="0" />
+                <size width="1" height="6" depth="1" />
+             </box>
+          </boxcolliders>
+          <centerpositionofdots numberofcenterofdot="6">
+             <centerpositionofdot id="0">
+                <position x="0" y="0" z="0" />
+                  </centerpositionofdot>
+             <centerpositionofdot id="1">
+                <position x="0" y="1" z="0" />
+             </centerpositionofdot>
+             <centerpositionofdot id="2">
+                <position x="0" y="2" z="0" />
+             </centerpositionofdot>
+             <centerpositionofdot id="3">
+                <position x="0" y="3" z="0" />
+             </centerpositionofdot>
+             <centerpositionofdot id="4">
+                <position x="0" y="4" z="0" />
+             </centerpositionofdot>
+             <centerpositionofdot id="5">
+                <position x="0" y="5" z="0" />
+             </centerpositionofdot>
+          </centerpositionofdots>
+          <interactiveframes scale="1" threshold="1" numberofinteractiveframe="6">
+             <if id="0">
+                <position x="0" y="0" z="1" />
+             </if>
+             <if id="1">
+                <position x="0" y="1" z="1" />
+             </if>
+             <if id="2">
+                <position x="0" y="2" z="1" />
+             </if>
+             <if id="3">
+                <position x="0" y="3" z="1" />
+             </if>
+             <if id="4">
+                <position x="0" y="4" z="1" />
+             </if>
+             <if id="5">
+                <position x="0" y="5" z="1" />
+             </if>
+          </interactiveframes>
+       </rotation>
+    </rotations>
+    </model>
+    
+    <model id="6">
+    <name>Brick_1x8</name>  
+    <defaultsizebrick x="8" y="1" z="1" />
+    <calibratevec x="10" y="0" z="14" />
+    <extrapositionvec x="0" y="0" z="4" />
+    <rotations numberofrotation="2">
+       <rotation id="0">
+          <sizebrick x="8" y="1" z="1" />
+          <translatefordraw x="0" y="0" z="0" />
+          <dots numberofdot="8">
+             <dot id="0">
+                <position x="0" y="0" z="0" />
+             </dot>
+             <dot id="1">
+                <position x="1" y="0" z="0" />
+             </dot>
+             <dot id="2">
+                <position x="2" y="0" z="0" />
+             </dot>
+             <dot id="3">
+                <position x="3" y="0" z="0" />
+             </dot>
+             <dot id="4">
+                <position x="4" y="0" z="0" />
+             </dot>
+             <dot id="5">
+                <position x="5" y="0" z="0" />
+             </dot>
+             <dot id="6">
+                <position x="6" y="0" z="0" />
+             </dot>
+             <dot id="7">
+                <position x="7" y="0" z="0" />
+             </dot>
+          </dots>
+          <boxcolliders numberofboxcolider="1">
+             <box id="0">
+                <position x="0" y="0" z="0" />
+                <size width="8" height="1" depth="1" />
+             </box>
+          </boxcolliders>
+          <centerpositionofdots numberofcenterofdot="8">
+             <centerpositionofdot id="0">
+                <position x="0" y="0" z="0" />
+                  </centerpositionofdot>
+             <centerpositionofdot id="1">
+                <position x="1" y="0" z="0" />
+             </centerpositionofdot>
+             <centerpositionofdot id="2">
+                <position x="2" y="0" z="0" />
+             </centerpositionofdot>
+             <centerpositionofdot id="3">
+                <position x="3" y="0" z="0" />
+             </centerpositionofdot>
+             <centerpositionofdot id="4">
+                <position x="4" y="0" z="0" />
+             </centerpositionofdot>
+             <centerpositionofdot id="5">
+                <position x="5" y="0" z="0" />
+             </centerpositionofdot>
+             <centerpositionofdot id="6">
+                <position x="6" y="0" z="0" />
+             </centerpositionofdot>
+             <centerpositionofdot id="7">
+                <position x="7" y="0" z="0" />
+             </centerpositionofdot>
+          </centerpositionofdots>
+          <interactiveframes scale="1" threshold="1" numberofinteractiveframe="8">
+             <if id="0">
+                <position x="0" y="0" z="1" />
+             </if>
+             <if id="1">
+                <position x="1" y="0" z="1" />
+             </if>
+             <if id="2">
+                <position x="2" y="0" z="1" />
+             </if>
+             <if id="3">
+                <position x="3" y="0" z="1" />
+             </if>
+             <if id="4">
+                <position x="4" y="0" z="1" />
+             </if>
+             <if id="5">
+                <position x="5" y="0" z="1" />
+             </if>
+             <if id="6">
+                <position x="6" y="0" z="1" />
+             </if>
+             <if id="7">
+                <position x="7" y="0" z="1" />
+             </if>
+          </interactiveframes>
+       </rotation>
+       <rotation id="1">
+          <sizebrick x="1" y="8" z="1" />
+          <translatefordraw x="0" y="0" z="0" />
+          <dots numberofdot="8">
+             <dot id="0">
+                <position x="0" y="0" z="0" />
+             </dot>
+             <dot id="1">
+                <position x="0" y="1" z="0" />
+             </dot>
+             <dot id="2">
+                <position x="0" y="2" z="0" />
+             </dot>
+             <dot id="3">
+                <position x="0" y="3" z="0" />
+             </dot>
+             <dot id="4">
+                <position x="0" y="4" z="0" />
+             </dot>
+             <dot id="5">
+                <position x="0" y="5" z="0" />
+             </dot>
+             <dot id="6">
+                <position x="0" y="6" z="0" />
+             </dot>
+             <dot id="7">
+                <position x="0" y="7" z="0" />
+             </dot>
+          </dots>
+          <boxcolliders numberofboxcolider="1">
+             <box id="0">
+                <position x="0" y="0" z="0" />
+                <size width="1" height="8" depth="1" />
+             </box>
+          </boxcolliders>
+          <centerpositionofdots numberofcenterofdot="8">
+             <centerpositionofdot id="0">
+                <position x="0" y="0" z="0" />
+                  </centerpositionofdot>
+             <centerpositionofdot id="1">
+                <position x="0" y="1" z="0" />
+             </centerpositionofdot>
+             <centerpositionofdot id="2">
+                <position x="0" y="2" z="0" />
+             </centerpositionofdot>
+             <centerpositionofdot id="3">
+                <position x="0" y="3" z="0" />
+             </centerpositionofdot>
+             <centerpositionofdot id="4">
+                <position x="0" y="4" z="0" />
+             </centerpositionofdot>
+             <centerpositionofdot id="5">
+                <position x="0" y="5" z="0" />
+             </centerpositionofdot>
+             <centerpositionofdot id="6">
+                <position x="0" y="6" z="0" />
+             </centerpositionofdot>
+             <centerpositionofdot id="7">
+                <position x="0" y="7" z="0" />
+             </centerpositionofdot>
+          </centerpositionofdots>
+          <interactiveframes scale="1" threshold="1" numberofinteractiveframe="8">
+             <if id="0">
+                <position x="0" y="0" z="1" />
+             </if>
+             <if id="1">
+                <position x="0" y="1" z="1" />
+             </if>
+             <if id="2">
+                <position x="0" y="2" z="1" />
+             </if>
+             <if id="3">
+                <position x="0" y="3" z="1" />
+             </if>
+             <if id="4">
+                <position x="0" y="4" z="1" />
+             </if>
+             <if id="5">
+                <position x="0" y="5" z="1" />
+             </if>
+             <if id="6">
+                <position x="0" y="6" z="1" />
+             </if>
+             <if id="7">
+                <position x="0" y="7" z="1" />
+             </if>
+          </interactiveframes>
+       </rotation>
+    </rotations>
+    </model>
+    
    </models>
 </brick>
