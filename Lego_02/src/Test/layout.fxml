@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.media.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.input.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<BorderPane fx:controller="Test.TestJavaFXController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+	<top>
+		<VBox BorderPane.alignment="CENTER">
+			<children>
+				<MenuBar>
+					<menus>
+						<Menu mnemonicParsing="false" text="File">
+							<items>
+								<MenuItem fx:id="menuItemNew" mnemonicParsing="false" text="New" onAction="#newGame">
+									<accelerator>
+										<KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+									</accelerator>
+								</MenuItem>
+								<MenuItem fx:id="menuItemOpen" mnemonicParsing="false" text="Open" onAction="#openGame">
+									<accelerator>
+										<KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+									</accelerator>
+								</MenuItem>
+								<MenuItem fx:id="menuItemSave" onAction="#saveGame" mnemonicParsing="false" text="Save">
+									<accelerator>
+										<KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+									</accelerator>
+								</MenuItem>
+								<MenuItem fx:id="menuItemExit" onAction="#exitGame" mnemonicParsing="false" text="Exit">
+									<accelerator>
+										<KeyCodeCombination alt="UP" code="Q" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+									</accelerator>
+								</MenuItem>
+							</items>
+						</Menu>
+						<Menu mnemonicParsing="false" text="Edit">
+							<items>
+								<MenuItem mnemonicParsing="false" text="Undo">
+									<accelerator>
+										<KeyCodeCombination alt="UP" code="Z" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+									</accelerator>
+								</MenuItem>
+								<MenuItem mnemonicParsing="false" text="Redo">
+									<accelerator>
+										<KeyCodeCombination alt="UP" code="Y" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+									</accelerator>
+								</MenuItem>
+							</items>
+						</Menu>
+						<Menu mnemonicParsing="false" text="Help">
+							<items>
+								<MenuItem mnemonicParsing="false" text="Help" />
+								<MenuItem mnemonicParsing="false" text="About" />
+								<MenuItem mnemonicParsing="false" text="Privacy Policy" />
+							</items>
+						</Menu>
+					</menus>
+				</MenuBar>
+				<ToolBar prefHeight="40.0" prefWidth="200.0">
+					<items>
+						<Button fx:id="btnHome" mnemonicParsing="false">
+							<graphic>
+								<ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
+									<image>
+										<Image url="@../home.png" />
+									</image>
+									<viewport>
+										<Rectangle2D />
+									</viewport>
+								</ImageView>
+							</graphic>
+						</Button>
+						<Button contentDisplay="CENTER" mnemonicParsing="false">
+							<graphic>
+								<ImageView pickOnBounds="true" preserveRatio="true">
+									<image>
+										<Image url="@../save.png" />
+									</image>
+								</ImageView>
+							</graphic>
+						</Button>
+						<Button graphicTextGap="0.0" mnemonicParsing="false">
+							<graphic>
+								<ImageView pickOnBounds="true" preserveRatio="true">
+									<image>
+										<Image url="@../undo.png" />
+									</image>
+								</ImageView>
+							</graphic>
+						</Button>
+						<Button mnemonicParsing="false" prefHeight="56.0" prefWidth="37.0">
+							<graphic>
+								<ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
+									<image>
+										<Image url="@../redo.png" />
+									</image>
+								</ImageView>
+							</graphic>
+						</Button>
+					</items>
+				</ToolBar>
+			</children>
+		</VBox>
+	</top>
+	<center>
+		<SplitPane dividerPositions="0.26588628762541805" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+			<items>
+				<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+					<children>
+						<BorderPane prefHeight="333.0" prefWidth="132.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+							<bottom>
+								<ToolBar prefHeight="26.0" prefWidth="132.0" BorderPane.alignment="CENTER_LEFT">
+									<items>
+										<Button contentDisplay="CENTER" mnemonicParsing="false">
+											<graphic>
+												<ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+													<image>
+														<Image url="@../color_picker.png" />
+													</image>
+												</ImageView>
+											</graphic>
+										</Button>
+										<Slider prefHeight="14.0" prefWidth="100.0" />
+									</items>
+								</ToolBar>
+							</bottom>
+							<center>
+								<GridPane BorderPane.alignment="CENTER">
+									<columnConstraints>
+										<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+										<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+										<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+										<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+									</columnConstraints>
+									<rowConstraints>
+										<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+										<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+										<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+										<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+										<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+										<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+										<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+										<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+										<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+									</rowConstraints>
+								</GridPane>
+							</center>
+						</BorderPane>
+					</children>
+				</AnchorPane>
+				<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+					<children>
+						<BorderPane fx:id="mainPane" prefHeight="333.0" prefWidth="460.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+					</children>
+				</AnchorPane>
+			</items>
+		</SplitPane>
+	</center>
+</BorderPane>

@@ -14,7 +14,7 @@ import controlP5.ControlP5;
 public class GameManager {
 	private PlaneLego planeLego;
 	private ArrayList<Brick> bricks;
-	private ArrayList<InteractiveFrame> interactiveFrameCollection;
+	public static ArrayList<InteractiveFrame> interactiveFrameCollection;
 
 	private int curFocusFramePos = -1;
 	private int prevFocusFramePos = -1;
@@ -34,6 +34,8 @@ public class GameManager {
 	private Brick prevFollowMouseBrick;
 	private boolean resetTempIFList = false;
 	private boolean switchBrick = false;
+	private ArrayList<Brick> undoListBricks;
+	private int maxLayerIndex;
 
 	public GameManager(PApplet p) {
 		super();
@@ -89,7 +91,7 @@ public class GameManager {
 	 * @return the interactiveFrameCollection
 	 */
 	public ArrayList<InteractiveFrame> getInteractiveFrameCollection() {
-		return interactiveFrameCollection;
+		return GameManager.interactiveFrameCollection;
 	}
 
 	/**
@@ -98,7 +100,7 @@ public class GameManager {
 	 */
 	public void setInteractiveFrameCollection(
 			ArrayList<InteractiveFrame> interactiveFrameCollection) {
-		this.interactiveFrameCollection = interactiveFrameCollection;
+		GameManager.interactiveFrameCollection = interactiveFrameCollection;
 	}
 
 	/**
@@ -286,6 +288,22 @@ public class GameManager {
 		this.guiTexts = guiTexts;
 	}
 
+	public ArrayList<Brick> getUndoListBricks() {
+		return undoListBricks;
+	}
+
+	public void setUndoListBricks(ArrayList<Brick> undoListBricks) {
+		this.undoListBricks = undoListBricks;
+	}
+
+	public int getMaxLayerIndex() {
+		return maxLayerIndex;
+	}
+
+	public void setMaxLayerIndex(int maxLayerIndex) {
+		this.maxLayerIndex = maxLayerIndex;
+	}
+
 	/**
 	 * @return the prevIF
 	 */
@@ -306,7 +324,8 @@ public class GameManager {
 		planeLego = new PlaneLego();
 		planeLego.setup();
 		bricks = new ArrayList<Brick>();
-		interactiveFrameCollection = new ArrayList<InteractiveFrame>();
+		undoListBricks = new ArrayList<Brick>();
+		GameManager.interactiveFrameCollection = new ArrayList<InteractiveFrame>();
 		setupBrickModel();
 		setupBrickFactory();
 		// curBrick = new Brick_2x1();
@@ -316,7 +335,7 @@ public class GameManager {
 		curBrick.setModelName(Util.MODEL_NAME_LIST.get(1));
 		curBrick.setModel(brickModels.get(Util.MODEL_NAME_LIST.get(1)));
 		tempInteractiveFrames = new ArrayList<InteractiveFrame>();
-		guiTexts = new ArrayList<GuiText>();
+		maxLayerIndex = 0;
 	}
 
 	/*
@@ -355,7 +374,7 @@ public class GameManager {
 		// TODO Auto-generated method stub
 		for (int i = 0; i < Util.MODEL_NAME_LIST.size(); i++) {
 			OBJModel objModel = new OBJModel(pApplet);
-			objModel.load("S:\\Lego Project\\Github project\\Lego\\https---github.com-thanhitpro-Lego.git\\Lego_02\\src\\" + Util.MODEL_NAME_LIST.get(i) + ".obj");
+			objModel.load(Util.MODEL_NAME_LIST.get(i) + ".obj");
 			objModel.enableDebug();
 			objModel.scale(Util.MODEL_SCALE);
 			objModel.translateToCenter();
@@ -378,8 +397,8 @@ public class GameManager {
 	public void updateInteractiveFrameCollection(Brick brick) {
 		// TODO Auto-generated method stub
 		for (int i = 0; i < brick.getDotInteractiveFrameList().size(); i++) {
-			interactiveFrameCollection.add(brick.getDotInteractiveFrameList()
-					.get(i));
+			GameManager.interactiveFrameCollection.add(brick
+					.getDotInteractiveFrameList().get(i));
 		}
 	}
 
@@ -428,6 +447,7 @@ public class GameManager {
 		for (int i = 0; i < tempInteractiveFrames.size(); i++) {
 			tempInteractiveFrames.get(i).removeFromAgentPool(
 					scene.motionAgent());
+			tempInteractiveFrames.remove(i);
 		}
 
 		tempInteractiveFrames = new ArrayList<InteractiveFrame>();
@@ -547,5 +567,22 @@ public class GameManager {
 
 		// isGeneratedTempIF = true;
 
+	}
+
+	public void undo() {
+		if (bricks.size() <= 0)
+			return;
+
+		Brick lastBrick = bricks.get(bricks.size() - 1);
+		for (int i = 0; i < lastBrick.getDotInteractiveFrameList().size(); i++) {
+			lastBrick.getDotInteractiveFrameList().get(i)
+					.removeFromAgentPool(Util.CURRENT_SCENE.motionAgent());
+			lastBrick.getDotInteractiveFrameList().remove(i);
+		}
+
+		lastBrick.setDotInteractiveFrameList(new ArrayList<InteractiveFrame>());
+
+		undoListBricks.add(lastBrick);
+		bricks.remove(bricks.size() - 1);
 	}
 }

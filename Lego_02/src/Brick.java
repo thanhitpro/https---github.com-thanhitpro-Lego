@@ -19,6 +19,8 @@ public class Brick implements DrawableObject {
 	protected float scaleRatio;
 	protected Vec rotate;
 	protected XmlBrick xmlBrick;
+	protected int layerIndex;
+	protected int nOfInteractiveFrameInSpecialCase;
 	/**
 	 * Position of the brick on Oxyz space
 	 */
@@ -42,6 +44,15 @@ public class Brick implements DrawableObject {
 	protected int timesRotate = 0;
 	protected Vec sizeBrick;
 	protected int id;
+	protected String color;
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
 
 	/**
 	 * @return the model
@@ -204,6 +215,15 @@ public class Brick implements DrawableObject {
 	public void generateInteractiveFrame() {
 		dotInteractiveFrameList = new ArrayList<InteractiveFrame>();
 
+	}
+
+	public int getnOfInteractiveFrameInSpecialCase() {
+		return nOfInteractiveFrameInSpecialCase;
+	}
+
+	public void setnOfInteractiveFrameInSpecialCase(
+			int nOfInteractiveFrameInSpecialCase) {
+		this.nOfInteractiveFrameInSpecialCase = nOfInteractiveFrameInSpecialCase;
 	}
 
 	public void generateInteractiveFrame(
@@ -390,7 +410,12 @@ public class Brick implements DrawableObject {
 							.getDotInteractiveFrameList().get(0).position().z());
 
 					if (Util.CheckExistInteractiveFrame(tempInteractiveFrames,
-							framePosition))
+							framePosition)
+							|| Util.CheckExistInteractiveFrame(
+									dotInteractiveFrameList, framePosition)
+							|| Util.CheckExistInteractiveFrame(
+									GameManager.interactiveFrameCollection,
+									framePosition))
 						continue;
 
 					InteractiveFrame iframe1 = new InteractiveFrame(
@@ -413,8 +438,9 @@ public class Brick implements DrawableObject {
 		}
 
 		if (tempIF.size() > 0)
-			Util.interactiveFrameDictionary.put(
-					brickFollowMouse.getModelName(), tempIF);
+			nOfInteractiveFrameInSpecialCase = tempIF.size();
+		Util.interactiveFrameDictionary.put(brickFollowMouse.getModelName(),
+				tempIF);
 
 	}
 
@@ -464,6 +490,14 @@ public class Brick implements DrawableObject {
 		this.id = id;
 	}
 
+	public int getLayerIndex() {
+		return layerIndex;
+	}
+
+	public void setLayerIndex(int layerIndex) {
+		this.layerIndex = layerIndex;
+	}
+
 	public void calibrateAfterRotate() {
 		translateForDraw = xmlBrick.getRotations().get(timesRotate)
 				.getTranslateForDraw();
@@ -475,10 +509,13 @@ public class Brick implements DrawableObject {
 		generateBoxCollider(xmlRotation.getBoxColliders());
 		generateCenterPositionOfDot(xmlRotation.getCenterPostionOfDots());
 	}
-
+	public void changeColor(int color) {
+		
+	}
 	public Brick() {
 		super();
 		dotInteractiveFrameList = new ArrayList<InteractiveFrame>();
+		color = "Blue";
 	}
 
 	public Brick(Brick input) {

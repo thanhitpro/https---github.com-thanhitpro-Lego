@@ -15,8 +15,8 @@ import xml.XmlBrick;
 
 public class Util {
 	public static String BRICK_2x1 = "brick_2x1";
-	public static int PLANE_WIDTH = 10;
-	public static int PLANE_HEIGHT = 10;
+	public static int PLANE_WIDTH = 20;
+	public static int PLANE_HEIGHT = 20;
 	public static int BRICK_SIZE = 20;
 	public static int MODEL_SCALE = 2;
 	public static int OBJECT_SCALE = 5;
