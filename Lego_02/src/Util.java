@@ -38,6 +38,9 @@ public class Util {
 	public static String FONT_FILE_NAME_DEFAULT = "SegoeUI-Light-48.vlw";
 	public static int FONT_SIZE_DEFAULT = 48;
 	public static Dictionary<String, XmlBrick> XML_BRICK_DICTIONARY= new Hashtable<String, XmlBrick>();
+	public static float DOT_HEIGH = 4.0f;
+	public static float FOOT_HEIGHT = 4.0f;
+	public static int EXTEND_BOX_SELECTED = 1;
 
 	public static void LoadModelNames() throws IOException {
 		MODEL_NAME_LIST = new ArrayList<String>();

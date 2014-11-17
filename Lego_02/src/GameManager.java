@@ -3,6 +3,7 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import remixlab.dandelion.constraint.AxisPlaneConstraint;
 import remixlab.dandelion.constraint.LocalConstraint;
 import remixlab.dandelion.core.InteractiveFrame;
@@ -36,6 +37,7 @@ public class GameManager {
 	private boolean switchBrick = false;
 	private ArrayList<Brick> undoListBricks;
 	private int maxLayerIndex;
+	private Vec currentColor;
 
 	public GameManager(PApplet p) {
 		super();
@@ -55,6 +57,14 @@ public class GameManager {
 	 */
 	public void setControlP5(ControlP5 controlP5) {
 		this.controlP5 = controlP5;
+	}
+
+	public Vec getCurrentColor() {
+		return currentColor;
+	}
+
+	public void setCurrentColor(Vec currentColor) {
+		this.currentColor = currentColor;
 	}
 
 	/**
@@ -336,6 +346,7 @@ public class GameManager {
 		curBrick.setModel(brickModels.get(Util.MODEL_NAME_LIST.get(1)));
 		tempInteractiveFrames = new ArrayList<InteractiveFrame>();
 		maxLayerIndex = 0;
+		currentColor = new Vec(255, 0, 0);
 	}
 
 	/*
@@ -374,9 +385,11 @@ public class GameManager {
 		// TODO Auto-generated method stub
 		for (int i = 0; i < Util.MODEL_NAME_LIST.size(); i++) {
 			OBJModel objModel = new OBJModel(pApplet);
+			objModel.setDrawMode(PConstants.POLYGON);
 			objModel.load(Util.MODEL_NAME_LIST.get(i) + ".obj");
 			objModel.enableDebug();
 			objModel.scale(Util.MODEL_SCALE);
+
 			objModel.translateToCenter();
 			brickModels.put(Util.MODEL_NAME_LIST.get(i), objModel);
 		}
@@ -573,7 +586,23 @@ public class GameManager {
 		if (bricks.size() <= 0)
 			return;
 
+		if (undoListBricks.size() > 0
+				&& undoListBricks.get(undoListBricks.size() - 1).isDeleteFlag()) {
+			Brick brick = undoListBricks.get(undoListBricks.size() - 1);
+			brick.setDeleteFlag(true);
+			undoListBricks.remove(brick);
+			brick.generateInteractiveFrame();
+			bricks.add(brick);
+			return;
+		}
+
 		Brick lastBrick = bricks.get(bricks.size() - 1);
+		lastBrick.setDeleteFlag(false);
+		removeBrickFromGame(lastBrick);
+		bricks.remove(bricks.size() - 1);
+	}
+
+	private void removeBrickFromGame(Brick lastBrick) {
 		for (int i = 0; i < lastBrick.getDotInteractiveFrameList().size(); i++) {
 			lastBrick.getDotInteractiveFrameList().get(i)
 					.removeFromAgentPool(Util.CURRENT_SCENE.motionAgent());
@@ -583,6 +612,27 @@ public class GameManager {
 		lastBrick.setDotInteractiveFrameList(new ArrayList<InteractiveFrame>());
 
 		undoListBricks.add(lastBrick);
-		bricks.remove(bricks.size() - 1);
+
+	}
+
+	public void delete(int brickSelected) {
+		Brick selectedBrick = bricks.get(brickSelected);
+		selectedBrick.setDeleteFlag(true);
+		removeBrickFromGame(selectedBrick);
+		bricks.remove(brickSelected);
+	}
+
+	public void redo() {
+		if (bricks.get(bricks.size() - 1).isDeleteFlag()) {
+			delete(bricks.size() - 1);
+			return;
+		}
+		if (undoListBricks.size() > 0) {
+			Brick brick = undoListBricks.get(undoListBricks.size() - 1);
+			undoListBricks.remove(brick);
+			brick.generateInteractiveFrame();
+			bricks.add(brick);
+
+		}
 	}
 }

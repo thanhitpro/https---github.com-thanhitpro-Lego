@@ -44,13 +44,22 @@ public class Brick implements DrawableObject {
 	protected int timesRotate = 0;
 	protected Vec sizeBrick;
 	protected int id;
-	protected String color;
+	protected Vec color;
+	protected boolean deleteFlag = false;
 
-	public String getColor() {
+	public boolean isDeleteFlag() {
+		return deleteFlag;
+	}
+
+	public void setDeleteFlag(boolean deleteFlag) {
+		this.deleteFlag = deleteFlag;
+	}
+
+	public Vec getColor() {
 		return color;
 	}
 
-	public void setColor(String color) {
+	public void setColor(Vec color) {
 		this.color = color;
 	}
 
@@ -387,8 +396,7 @@ public class Brick implements DrawableObject {
 		int w = (int) brickFollowMouse.getSizeBrick().x();
 		int h = (int) brickFollowMouse.getSizeBrick().y();
 
-		// ArrayList<InteractiveFrame> tempIF = new
-		// ArrayList<InteractiveFrame>();
+		ArrayList<InteractiveFrame> tempIF = new ArrayList<InteractiveFrame>();
 
 		for (int k = 0; k < xmlBrick.getRotations().get(timesRotate)
 				.getInteractiveFrames().size(); k++) {
@@ -433,15 +441,15 @@ public class Brick implements DrawableObject {
 							framePosition.y(), framePosition.z());
 					iframe1.setGrabsInputThreshold(Util.THRESHOLD_VALUE);
 					tempInteractiveFrames.add(iframe1);
-					// tempIF.add(iframe1);
+					tempIF.add(iframe1);
 				}
 			}
 		}
 
-		// if (tempIF.size() > 0)
-		// nOfInteractiveFrameInSpecialCase = tempIF.size();
-		// Util.interactiveFrameDictionary.put(brickFollowMouse.getModelName(),
-		// tempIF);
+		if (tempIF.size() > 0)
+			nOfInteractiveFrameInSpecialCase = tempIF.size();
+		Util.interactiveFrameDictionary.put(brickFollowMouse.getModelName(),
+				tempIF);
 
 	}
 
@@ -514,7 +522,7 @@ public class Brick implements DrawableObject {
 	public Brick() {
 		super();
 		dotInteractiveFrameList = new ArrayList<InteractiveFrame>();
-		color = "Blue";
+		color = new Vec(255, 0, 0);
 	}
 
 	public Brick(Brick input) {

@@ -9,10 +9,10 @@ import javafx.embed.swing.JFXPanel;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -24,13 +24,19 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 
+import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+
+import remixlab.dandelion.geom.Vec;
 
 public class ExampleFrame extends JFrame {
 
@@ -104,7 +110,7 @@ public class ExampleFrame extends JFrame {
 		saveBtn.setGraphic(new ImageView("save.png"));
 		undoBtn.setGraphic(new ImageView("undo.png"));
 		undoBtn.setOnAction(new EventHandler<ActionEvent>() {
-			
+
 			@Override
 			public void handle(ActionEvent arg0) {
 				// TODO Auto-generated method stub
@@ -112,7 +118,14 @@ public class ExampleFrame extends JFrame {
 			}
 		});
 		redoBtn.setGraphic(new ImageView("redo.png"));
+		redoBtn.setOnAction(new EventHandler<ActionEvent>() {
 
+			@Override
+			public void handle(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				legoGame.redo();
+			}
+		});
 		// Add the Buttons to the ToolBar.
 		toolBar = new ToolBar();
 		toolBar.getItems().addAll(homeBtn, saveBtn, undoBtn, redoBtn);
@@ -239,11 +252,47 @@ public class ExampleFrame extends JFrame {
 		tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 		Tab bricksTab = new Tab();
 		bricksTab.setText("Bricks");
-		HBox hbox = new HBox();
-		Label label = new Label("Magic Lab");
-		hbox.getChildren().add(label);
 
-		bricksTab.setContent(hbox);
+		GridPane gridPane = new GridPane();
+		gridPane.setAlignment(Pos.TOP_LEFT);
+		gridPane.getColumnConstraints().add(new ColumnConstraints(20));
+		gridPane.getColumnConstraints().add(new ColumnConstraints(80));
+		gridPane.getRowConstraints().add(new RowConstraints(5));
+		gridPane.getRowConstraints().add(new RowConstraints(60));
+
+		Button button01 = new Button("Brick_2x1");
+		button01.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				legoGame.selectBrick(1);
+			}
+		});
+		GridPane.setRowIndex(button01, 1);
+		GridPane.setColumnIndex(button01, 1);
+		Button button02 = new Button("Brick_2x2");
+		button02.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				legoGame.selectBrick(2);
+			}
+		});
+		GridPane.setRowIndex(button02, 2);
+		GridPane.setColumnIndex(button02, 1);
+		Button button03 = new Button("Brick_1x4");
+		button03.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				legoGame.selectBrick(3);
+			}
+		});
+		GridPane.setRowIndex(button03, 1);
+		GridPane.setColumnIndex(button03, 2);
+		gridPane.getChildren().addAll(button01, button02, button03);
+
+		bricksTab.setContent(gridPane);
 
 		Tab templatesTab = new Tab();
 		templatesTab.setText("Templates");
@@ -263,6 +312,18 @@ public class ExampleFrame extends JFrame {
 		ToolBar toolBar = new ToolBar();
 		Button btnColor = new Button();
 		btnColor.setGraphic(new ImageView("color_picker.png"));
+		btnColor.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				java.awt.Color c = JColorChooser.showDialog(null,
+						"Choose a Color", null);
+				if (c != null)
+					legoGame.setColor(new Vec(c.getRed(), c.getGreen(), c
+							.getBlue()));
+
+			}
+		});
 		btnColor.setPrefSize(48, 48);
 		btnColor.setPadding(new Insets(-10));
 		toolBar.getItems().add(btnColor);

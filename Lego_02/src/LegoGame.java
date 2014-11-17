@@ -1,8 +1,8 @@
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PShape;
 import remixlab.dandelion.constraint.AxisPlaneConstraint;
 import remixlab.dandelion.constraint.LocalConstraint;
@@ -18,11 +18,15 @@ public class LegoGame extends PApplet {
 	GameManager gameManager;
 	MenuController menuController;
 	boolean finishLoading = true;
-	ArrayList<Vec> tempBox = new ArrayList<Vec>();
+	// ArrayList<Vec> tempBox = new ArrayList<Vec>();
 	// private Ray currentRay;
 	boolean disableBox = false;
 	int brickCollisionIndexPrev = -1;
 	int brickCollisionIndex = -1;
+	int brickSelected = -1;
+	boolean debugFlag = false;
+	boolean selectedBrick = false;
+	boolean flagCheckKeyCode = false;
 
 	public void saveGame(String fileName) {
 		menuController.setFileName(fileName);
@@ -39,6 +43,45 @@ public class LegoGame extends PApplet {
 
 	public void undo() {
 		gameManager.undo();
+	}
+
+	public void redo() {
+		gameManager.redo();
+	}
+
+	public void setColor(Vec color) {
+		gameManager.setCurrentColor(color);
+	}
+
+	public void selectBrick(int brick) {
+		Brick tempBrick = null;
+		flagCheckKeyCode = true;
+		selectedBrick = false;
+		// Process switching brick
+		gameManager.getCurBrick().setModelName(
+				Util.MODEL_NAME_LIST.get(brick - 1));
+		gameManager.setSwitchBrick(true);
+		// gameManager.getTempInteractiveFrames().clear();
+
+		try {
+			tempBrick = gameManager.getBrickFactory().createBrick(
+					gameManager.getCurBrick().getModelName());
+			tempBrick.setModelName(gameManager.getCurBrick().getModelName());
+			gameManager.setDisableBoxFollowMouse(false);
+			disableBox = false;
+		} catch (NoSuchMethodException | SecurityException
+				| InstantiationException | IllegalAccessException
+				| IllegalArgumentException | InvocationTargetException e) {
+
+			e.printStackTrace();
+		}
+
+		if (flagCheckKeyCode) {
+			gameManager.setGeneratedTempIF(false);
+			gameManager.setResetTempIFList(true);
+			gameManager.generateInteractiveFrameForSpecialCase2(tempBrick,
+					scene);
+		}
 	}
 
 	public void setup() {
@@ -60,6 +103,13 @@ public class LegoGame extends PApplet {
 		// currentRay = null;
 	}
 
+	public void delete() {
+		gameManager.delete(brickSelected);
+		brickSelected = -1;
+		brickCollisionIndex = -1;
+		brickCollisionIndexPrev = -1;
+	}
+
 	public void loadGame(String fileName) {
 		newGame();
 		menuController.setFileName(fileName);
@@ -78,34 +128,75 @@ public class LegoGame extends PApplet {
 	}
 
 	private void drawBoxCoverBrickSelected() {
-		if (brickCollisionIndex != -1) {
-			strokeWeight(3);
-			stroke(255, 0, 0);
+		int index = brickCollisionIndex;
+
+		if (brickSelected != -1 && selectedBrick) {
+			strokeWeight(2);
+			index = brickSelected;
+			stroke(39, 255, 228);
 			noFill();
 			pushMatrix();
-			Vec size = gameManager.getBricks().get(brickCollisionIndex)
-					.getSizeBrick();
-			translate(gameManager.getBricks().get(brickCollisionIndex)
-					.getTranslate().x()
-					+ gameManager.getBricks().get(brickCollisionIndex)
-							.getCalibrateVec().x(), gameManager.getBricks()
-					.get(brickCollisionIndex).getTranslate().y()
-					+ gameManager.getBricks().get(brickCollisionIndex)
-							.getCalibrateVec().y(), gameManager.getBricks()
-					.get(brickCollisionIndex).getTranslate().z()
-					+ gameManager.getBricks().get(brickCollisionIndex)
-							.getCalibrateVec().z());
-			if (gameManager.getBricks().get(brickCollisionIndex)
-					.getTranslateForDraw() != null) {
-				translate(gameManager.getBricks().get(brickCollisionIndex)
+			translate(gameManager.getBricks().get(index).getTranslate().x()
+					+ gameManager.getBricks().get(index).getCalibrateVec().x(),
+					gameManager.getBricks().get(index).getTranslate().y()
+							+ gameManager.getBricks().get(index)
+									.getCalibrateVec().y(), gameManager
+							.getBricks().get(index).getTranslate().z()
+							+ gameManager.getBricks().get(index)
+									.getCalibrateVec().z());
+			if (gameManager.getBricks().get(index).getTranslateForDraw() != null) {
+				translate(gameManager.getBricks().get(index)
 						.getTranslateForDraw().x(), gameManager.getBricks()
-						.get(brickCollisionIndex).getTranslateForDraw().y(),
-						gameManager.getBricks().get(brickCollisionIndex)
-								.getTranslateForDraw().z());
+						.get(index).getTranslateForDraw().y(), gameManager
+						.getBricks().get(index).getTranslateForDraw().z());
 			}
+			for (int i = 0; i < gameManager.getBricks().get(index)
+					.getBoxCollider().getListBox().size(); i++) {
+				box(gameManager.getBricks().get(index).getBoxCollider()
+						.getListBox().get(i).getWidth(), gameManager
+						.getBricks().get(index).getBoxCollider().getListBox()
+						.get(i).getHeight(), gameManager.getBricks().get(index)
+						.getBoxCollider().getListBox().get(i).getDepth()
+						+ Util.DOT_HEIGH + Util.FOOT_HEIGHT);
 
-			box(size.x() * Util.BRICK_SIZE, size.y() * Util.BRICK_SIZE,
-					size.z() * Util.BRICK_SIZE);
+			}
+			popMatrix();
+		}
+		if (brickCollisionIndex != -1) {
+			strokeWeight(2);
+			index = brickCollisionIndex;
+			stroke(255, 120, 189);
+			noFill();
+			pushMatrix();
+			translate(gameManager.getBricks().get(index).getTranslate().x()
+					+ gameManager.getBricks().get(index).getCalibrateVec().x(),
+					gameManager.getBricks().get(index).getTranslate().y()
+							+ gameManager.getBricks().get(index)
+									.getCalibrateVec().y(), gameManager
+							.getBricks().get(index).getTranslate().z()
+							+ gameManager.getBricks().get(index)
+									.getCalibrateVec().z());
+			if (gameManager.getBricks().get(index).getTranslateForDraw() != null) {
+				translate(gameManager.getBricks().get(index)
+						.getTranslateForDraw().x(), gameManager.getBricks()
+						.get(index).getTranslateForDraw().y(), gameManager
+						.getBricks().get(index).getTranslateForDraw().z());
+			}
+			for (int i = 0; i < gameManager.getBricks().get(index)
+					.getBoxCollider().getListBox().size(); i++) {
+				box(gameManager.getBricks().get(index).getBoxCollider()
+						.getListBox().get(i).getWidth()
+						+ Util.EXTEND_BOX_SELECTED, gameManager.getBricks()
+						.get(index).getBoxCollider().getListBox().get(i)
+						.getHeight()
+						+ Util.EXTEND_BOX_SELECTED, gameManager.getBricks()
+						.get(index).getBoxCollider().getListBox().get(i)
+						.getDepth()
+						+ Util.DOT_HEIGH
+						+ Util.FOOT_HEIGHT
+						+ Util.EXTEND_BOX_SELECTED);
+
+			}
 			popMatrix();
 		}
 	}
@@ -123,7 +214,7 @@ public class LegoGame extends PApplet {
 				pushMatrix();
 				gameManager.getPlaneLego().getInteractiveFrames()
 						.get(i * Util.PLANE_WIDTH + j).applyTransformation();
-				drawAxes();
+				// drawAxes();
 				popMatrix();
 				pushMatrix();
 				gameManager
@@ -149,12 +240,13 @@ public class LegoGame extends PApplet {
 
 		int counter = 0;
 		for (int i = 0; i < gameManager.getBricks().size(); i++) {
+
 			pushMatrix();
 			for (int j = 0; j < gameManager.getBricks().get(i)
 					.getDotInteractiveFrameList().size(); j++) {
 				gameManager.getBricks().get(i).getDotInteractiveFrameList()
 						.get(j).applyTransformation();
-				drawAxes();			
+				// drawAxes();
 				fill(setColor(
 						gameManager.getBricks().get(i)
 								.getDotInteractiveFrameList().get(j)
@@ -184,6 +276,10 @@ public class LegoGame extends PApplet {
 			scale(gameManager.getBricks().get(i).getScaleRatio());
 			rotateX(gameManager.getBricks().get(i).getRotate().x());
 			rotateY(gameManager.getBricks().get(i).getRotate().y());
+			fill(gameManager.getBricks().get(i).getColor().x(), gameManager
+					.getBricks().get(i).getColor().y(), gameManager.getBricks()
+					.get(i).getColor().z());
+			gameManager.getBricks().get(i).getModel().disableMaterial();
 			gameManager.getBricks().get(i).getModel().draw();
 			popMatrix();
 		}
@@ -210,13 +306,16 @@ public class LegoGame extends PApplet {
 			scale(gameManager.getBrickFollowMouse().getScaleRatio());
 			rotateX(gameManager.getBrickFollowMouse().getRotate().x());
 			rotateY(gameManager.getBrickFollowMouse().getRotate().y());
+			fill(gameManager.getBrickFollowMouse().getColor().x(), gameManager
+					.getBrickFollowMouse().getColor().y(), gameManager
+					.getBrickFollowMouse().getColor().z());
+			gameManager.getBrickFollowMouse().getModel().disableMaterial();
 			gameManager.getBrickFollowMouse().draw();
 			popMatrix();
 
 		}
 
 		for (int f = 0; f < gameManager.getTempInteractiveFrames().size(); f++) {
-			// Draw interactive frame on screen
 			pushMatrix();
 			gameManager.getTempInteractiveFrames().get(f).applyTransformation();
 			drawAxes();
@@ -229,6 +328,7 @@ public class LegoGame extends PApplet {
 			popMatrix();
 
 		}
+
 		noStroke();
 		// saveState();
 		// gameManager.drawGUI();
@@ -271,7 +371,7 @@ public class LegoGame extends PApplet {
 				scene.camera().at().x(), scene.camera().at().y(),
 				scene.camera().at().z(), scene.camera().upVector().x(),
 				scene.camera().upVector().y(), scene.camera().upVector().z());
-		//hint(ENABLE_DEPTH_TEST);
+		// hint(ENABLE_DEPTH_TEST);
 	}
 
 	/**
@@ -289,7 +389,7 @@ public class LegoGame extends PApplet {
 	public int setColor(boolean selected, int position,
 			Brick brickConsistIFrame, int positionOfInteractiveFrame) {
 		if (disableBox)
-			return color(200, 200, 0);
+			return color(200, 200, 200);
 		if (selected) {
 			/*
 			 * Check Collision the brick at current mouse position with all
@@ -339,6 +439,7 @@ public class LegoGame extends PApplet {
 				brick.setModel(gameManager.getBrickModels().get(
 						brick.getModelName()));
 				brick.generateBoxCollider();
+				brick.setColor(gameManager.getCurrentColor());
 
 				if (brickConsistIFrame == null) {
 					gameManager.setGeneratedTempIF(true);
@@ -401,7 +502,6 @@ public class LegoGame extends PApplet {
 			return;
 		// gameManager.getBrickFollowMouse().calibrateAfterRotate();
 
-		boolean flagCheckKeyCode = false;
 		if (key == 't' || key == 'T' || keyCode == 37) {
 			gameManager.getBrickFollowMouse().getRotate()
 					.add(0, Util.ROTATE_ANGLE_ADDED, 0);
@@ -421,15 +521,11 @@ public class LegoGame extends PApplet {
 			flagCheckKeyCode = true;
 		}
 
-		if (key == 'h' || key == 'H') {
-			gameManager.setDisableBoxFollowMouse(false);
-			disableBox = true;
-		}
-
 		gameManager.getBrickFollowMouse().calibrateAfterRotate();
 
 		if (Util.KEY_SWITCH_BRICK.indexOf(key) != -1) {
 			flagCheckKeyCode = true;
+			selectedBrick = false;
 			// Process switching brick
 			gameManager.getCurBrick().setModelName(
 					Util.MODEL_NAME_LIST.get((Integer.parseInt(String
@@ -442,10 +538,12 @@ public class LegoGame extends PApplet {
 						gameManager.getCurBrick().getModelName());
 				tempBrick
 						.setModelName(gameManager.getCurBrick().getModelName());
+				gameManager.setDisableBoxFollowMouse(false);
+				disableBox = false;
 			} catch (NoSuchMethodException | SecurityException
 					| InstantiationException | IllegalAccessException
 					| IllegalArgumentException | InvocationTargetException e) {
-				// TODO Auto-generated catch block
+
 				e.printStackTrace();
 			}
 		}
@@ -460,25 +558,35 @@ public class LegoGame extends PApplet {
 		if (key == 'n' || key == 'N') {
 			newGame();
 		}
+
+		if (key == 'd') {
+			debugFlag = true;
+		}
+
+		if (key == PConstants.DELETE) {
+			if (brickSelected != -1) {
+				System.out.println("Delete");
+				delete();
+				brickSelected = -1;
+
+			}
+		}
 	}
 
 	public void mouseClicked() {
-		// tempBox.clear();
-		// objectPicking();
-		/*
-		 * for (int i = 0; i < gameManager.getBricks().size(); i++) { Brick
-		 * tempBrick = gameManager.getBricks().get(i); for (int j = 0; j <
-		 * tempBrick.getBoxCollider().getListBox().size(); j++) { Box tempBox =
-		 * tempBrick.getBoxCollider().getListBox().get(j);
-		 * 
-		 * } }
-		 */
+		if (disableBox && brickCollisionIndex != -1) {
+			selectedBrick = true;
+			brickSelected = brickCollisionIndex;
+			System.out.println(brickSelected);
+		} else {
+			brickSelected = -1;
+		}
+
 		if (gameManager.getCurFocusFramePos() == -1
 				|| gameManager.getBrickFollowMouse() == null
 				|| gameManager.isDisableBoxFollowMouse())
 			return;
 
-		// Brick brick = gameManager.getBrickFollowMouse();
 		Brick brick;
 		try {
 			brick = gameManager.getBrickFactory().createBrick(
@@ -494,12 +602,9 @@ public class LegoGame extends PApplet {
 					.getTimesRotate());
 			brick.setTranslateForDraw(gameManager.getBrickFollowMouse()
 					.getTranslateForDraw());
-
-			// brick.generateInteractiveFrame();
-			// brick.generateBoxCollider();
-			// brick.generateCenterPositionOfDot();
 			brick.setLayerIndex(gameManager.getBrickFollowMouse()
 					.getLayerIndex());
+			brick.setColor(gameManager.getBrickFollowMouse().getColor());
 			if (brick.getLayerIndex() > gameManager.getMaxLayerIndex()) {
 				gameManager.setMaxLayerIndex(brick.getLayerIndex());
 			}
@@ -512,6 +617,9 @@ public class LegoGame extends PApplet {
 			gameManager.setResetTempIFList(true);
 			gameManager.setSwitchBrick(false);
 			gameManager.generateInteractiveFrameForSpecialCase2(null, scene);
+			gameManager.setDisableBoxFollowMouse(true);
+			disableBox = true;
+			// gameManager.setBrickFollowMouse(null);
 		} catch (NoSuchMethodException | SecurityException
 				| InstantiationException | IllegalAccessException
 				| IllegalArgumentException | InvocationTargetException e) {
@@ -530,6 +638,7 @@ public class LegoGame extends PApplet {
 	private void setupDisplay() {
 		background(85, 173, 255);
 		lights();
+
 		scene.setPickingVisualHint(false);
 	}
 
@@ -625,21 +734,9 @@ public class LegoGame extends PApplet {
 
 	@Override
 	public void mouseMoved() {
-		// TODO Auto-generated method stub
 		super.mouseMoved();
+		// tempBox.clear();
 		objectPicking();
-		// System.out.println("X: " + mouseX + "; Y: " + mouseY);
-		// System.out.println("Camera position: " + scene.camera().position());
-		// System.out.println("Near position: " + scene.camera().zNear());
-		// System.out.println("Far position: " + scene.camera().zFar());
-		// System.out.println("Size: " + width + "; " + height);
-		// System.out.println("Camera rotation: " +
-		// scene.camera().orientation().angle());
-		// objectPicking();
-		
-		if (brickCollisionIndex != -1) {
-			
-		}
 
 	}
 
@@ -676,16 +773,16 @@ public class LegoGame extends PApplet {
 			if (pos.z() < 0 || brickCollisionIndex != -1) {
 				if (brickCollisionIndex != -1) {
 					if (brickCollisionIndexPrev == -1
-							|| brickCollisionIndexPrev != brickCollisionIndex) {
+							|| brickCollisionIndex != -1) {
 						brickCollisionIndexPrev = brickCollisionIndex;
-						System.out.println(gameManager.getBricks()
-								.get(brickCollisionIndex).getId());
 					}
 				}
 				break;
 			}
 
 			i++;
+			if (i > 1000)
+				break;
 		}
 
 		// currentRay = new Ray(WS_Start, WS_Direc);
@@ -696,8 +793,22 @@ public class LegoGame extends PApplet {
 
 	private int checkCollisionPointAndBox(Vec pos) {
 		for (int i = 0; i < gameManager.getBricks().size(); i++) {
-			if (gameManager.getBricks().get(i).getBoxCollider().Containt(pos)) {
-				return i;
+			for (int j = 0; j < gameManager.getBricks().get(i).getBoxCollider()
+					.getListBox().size(); j++) {
+				Vec tempVec = Vec.subtract(gameManager.getBricks().get(i)
+						.getBoxCollider().getListBox().get(j).getPosition(),
+						new Vec(Util.BRICK_SIZE / 2, Util.BRICK_SIZE / 2, 0));
+				Box box = new Box();
+				box.setPosition(tempVec);
+				box.setWidth(gameManager.getBricks().get(i).getBoxCollider()
+						.getListBox().get(j).getWidth());
+				box.setHeight(gameManager.getBricks().get(i).getBoxCollider()
+						.getListBox().get(j).getHeight());
+				box.setDepth(gameManager.getBricks().get(i).getBoxCollider()
+						.getListBox().get(j).getDepth());
+				if (box.Container(pos)) {
+					return i;
+				}
 			}
 		}
 		return -1;
