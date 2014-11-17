@@ -19,7 +19,7 @@ public class Box {
 	 */
 	public void setWidth(float width) {
 		this.width = width;
-	}
+	}	
 
 	/**
 	 * @return the height

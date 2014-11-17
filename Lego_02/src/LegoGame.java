@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -23,6 +22,7 @@ public class LegoGame extends PApplet {
 	// private Ray currentRay;
 	boolean disableBox = false;
 	int brickCollisionIndexPrev = -1;
+	int brickCollisionIndex = -1;
 
 	public void saveGame(String fileName) {
 		menuController.setFileName(fileName);
@@ -67,6 +67,7 @@ public class LegoGame extends PApplet {
 	}
 
 	public void draw() {
+		noStroke();
 		setupDisplay();
 		// gameManager.drawGUI();
 		if (!finishLoading)
@@ -77,26 +78,49 @@ public class LegoGame extends PApplet {
 	}
 
 	private void drawBoxCoverBrickSelected() {
-		
-	}
-
-	private void drawBox() {
-		for (int i = 0; i < tempBox.size(); i++) {
+		if (brickCollisionIndex != -1) {
+			strokeWeight(3);
+			stroke(255, 0, 0);
+			noFill();
 			pushMatrix();
-			translate(tempBox.get(i).x(), tempBox.get(i).y(), tempBox.get(i)
-					.z());
-			box(1);
+			Vec size = gameManager.getBricks().get(brickCollisionIndex)
+					.getSizeBrick();
+			translate(gameManager.getBricks().get(brickCollisionIndex)
+					.getTranslate().x()
+					+ gameManager.getBricks().get(brickCollisionIndex)
+							.getCalibrateVec().x(), gameManager.getBricks()
+					.get(brickCollisionIndex).getTranslate().y()
+					+ gameManager.getBricks().get(brickCollisionIndex)
+							.getCalibrateVec().y(), gameManager.getBricks()
+					.get(brickCollisionIndex).getTranslate().z()
+					+ gameManager.getBricks().get(brickCollisionIndex)
+							.getCalibrateVec().z());
+			if (gameManager.getBricks().get(brickCollisionIndex)
+					.getTranslateForDraw() != null) {
+				translate(gameManager.getBricks().get(brickCollisionIndex)
+						.getTranslateForDraw().x(), gameManager.getBricks()
+						.get(brickCollisionIndex).getTranslateForDraw().y(),
+						gameManager.getBricks().get(brickCollisionIndex)
+								.getTranslateForDraw().z());
+			}
+
+			box(size.x() * Util.BRICK_SIZE, size.y() * Util.BRICK_SIZE,
+					size.z() * Util.BRICK_SIZE);
 			popMatrix();
 		}
 	}
+
+	/*
+	 * private void drawBox() { for (int i = 0; i < tempBox.size(); i++) {
+	 * pushMatrix(); translate(tempBox.get(i).x(), tempBox.get(i).y(),
+	 * tempBox.get(i) .z()); box(1); popMatrix(); } }
+	 */
 
 	private void drawScene() {
 		for (int i = 0; i < Util.PLANE_WIDTH; i++) {
 			for (int j = 0; j < Util.PLANE_HEIGHT; j++) {
 				// Draw interactive frame on screen
 				pushMatrix();
-				// planeLego.getInteractiveFrames().get(i * width +
-				// j).applyTransformation();
 				gameManager.getPlaneLego().getInteractiveFrames()
 						.get(i * Util.PLANE_WIDTH + j).applyTransformation();
 				drawAxes();
@@ -130,14 +154,7 @@ public class LegoGame extends PApplet {
 					.getDotInteractiveFrameList().size(); j++) {
 				gameManager.getBricks().get(i).getDotInteractiveFrameList()
 						.get(j).applyTransformation();
-				drawAxes();
-			}
-			popMatrix();
-
-			pushMatrix();
-
-			for (int j = 0; j < gameManager.getBricks().get(i)
-					.getDotInteractiveFrameList().size(); j++) {
+				drawAxes();			
 				fill(setColor(
 						gameManager.getBricks().get(i)
 								.getDotInteractiveFrameList().get(j)
@@ -201,8 +218,6 @@ public class LegoGame extends PApplet {
 		for (int f = 0; f < gameManager.getTempInteractiveFrames().size(); f++) {
 			// Draw interactive frame on screen
 			pushMatrix();
-			// planeLego.getInteractiveFrames().get(i * width +
-			// j).applyTransformation();
 			gameManager.getTempInteractiveFrames().get(f).applyTransformation();
 			drawAxes();
 			popMatrix();
@@ -256,7 +271,7 @@ public class LegoGame extends PApplet {
 				scene.camera().at().x(), scene.camera().at().y(),
 				scene.camera().at().z(), scene.camera().upVector().x(),
 				scene.camera().upVector().y(), scene.camera().upVector().z());
-		hint(ENABLE_DEPTH_TEST);
+		//hint(ENABLE_DEPTH_TEST);
 	}
 
 	/**
@@ -621,6 +636,10 @@ public class LegoGame extends PApplet {
 		// System.out.println("Camera rotation: " +
 		// scene.camera().orientation().angle());
 		// objectPicking();
+		
+		if (brickCollisionIndex != -1) {
+			
+		}
 
 	}
 
@@ -653,7 +672,7 @@ public class LegoGame extends PApplet {
 			pos = Vec.add(WS_Start,
 					Vec.multiply(WS_Direc, i + scene.camera().zNear()));
 			// tempBox.add(pos);
-			int brickCollisionIndex = checkCollisionPointAndBox(pos);
+			brickCollisionIndex = checkCollisionPointAndBox(pos);
 			if (pos.z() < 0 || brickCollisionIndex != -1) {
 				if (brickCollisionIndex != -1) {
 					if (brickCollisionIndexPrev == -1

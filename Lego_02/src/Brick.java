@@ -387,7 +387,8 @@ public class Brick implements DrawableObject {
 		int w = (int) brickFollowMouse.getSizeBrick().x();
 		int h = (int) brickFollowMouse.getSizeBrick().y();
 
-		ArrayList<InteractiveFrame> tempIF = new ArrayList<InteractiveFrame>();
+		// ArrayList<InteractiveFrame> tempIF = new
+		// ArrayList<InteractiveFrame>();
 
 		for (int k = 0; k < xmlBrick.getRotations().get(timesRotate)
 				.getInteractiveFrames().size(); k++) {
@@ -432,15 +433,15 @@ public class Brick implements DrawableObject {
 							framePosition.y(), framePosition.z());
 					iframe1.setGrabsInputThreshold(Util.THRESHOLD_VALUE);
 					tempInteractiveFrames.add(iframe1);
-					tempIF.add(iframe1);
+					// tempIF.add(iframe1);
 				}
 			}
 		}
 
-		if (tempIF.size() > 0)
-			nOfInteractiveFrameInSpecialCase = tempIF.size();
-		Util.interactiveFrameDictionary.put(brickFollowMouse.getModelName(),
-				tempIF);
+		// if (tempIF.size() > 0)
+		// nOfInteractiveFrameInSpecialCase = tempIF.size();
+		// Util.interactiveFrameDictionary.put(brickFollowMouse.getModelName(),
+		// tempIF);
 
 	}
 
@@ -509,9 +510,7 @@ public class Brick implements DrawableObject {
 		generateBoxCollider(xmlRotation.getBoxColliders());
 		generateCenterPositionOfDot(xmlRotation.getCenterPostionOfDots());
 	}
-	public void changeColor(int color) {
-		
-	}
+
 	public Brick() {
 		super();
 		dotInteractiveFrameList = new ArrayList<InteractiveFrame>();
