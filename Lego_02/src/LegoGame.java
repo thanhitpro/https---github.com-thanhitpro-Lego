@@ -214,7 +214,7 @@ public class LegoGame extends PApplet {
 				pushMatrix();
 				gameManager.getPlaneLego().getInteractiveFrames()
 						.get(i * Util.PLANE_WIDTH + j).applyTransformation();
-				// drawAxes();
+				drawAxes();
 				popMatrix();
 				pushMatrix();
 				gameManager
@@ -246,13 +246,20 @@ public class LegoGame extends PApplet {
 					.getDotInteractiveFrameList().size(); j++) {
 				gameManager.getBricks().get(i).getDotInteractiveFrameList()
 						.get(j).applyTransformation();
-				// drawAxes();
-				fill(setColor(
+				drawAxes();
+			}
+			popMatrix();
+
+			pushMatrix();
+
+			for (int j = 0; j < gameManager.getBricks().get(i)
+					.getDotInteractiveFrameList().size(); j++) {
+				setColor(
 						gameManager.getBricks().get(i)
 								.getDotInteractiveFrameList().get(j)
 								.grabsInput(scene.motionAgent()),
 						Util.PLANE_HEIGHT * Util.PLANE_WIDTH + counter,
-						gameManager.getBricks().get(i), j));
+						gameManager.getBricks().get(i), j);
 				counter++;
 			}
 

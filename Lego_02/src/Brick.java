@@ -446,10 +446,11 @@ public class Brick implements DrawableObject {
 			}
 		}
 
-		if (tempIF.size() > 0)
+		if (tempIF.size() > 0) {
 			nOfInteractiveFrameInSpecialCase = tempIF.size();
-		Util.interactiveFrameDictionary.put(brickFollowMouse.getModelName(),
-				tempIF);
+			Util.interactiveFrameDictionary.put(
+					brickFollowMouse.getModelName(), tempIF);
+		}
 
 	}
 
